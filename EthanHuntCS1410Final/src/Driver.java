@@ -47,10 +47,12 @@ public class Driver extends JFrame{
 			public void mouseClicked(MouseEvent e) {
 				System.out.println("hard");
 				m.setVisible(false);
-				MapSelection map = new MapSelection(10);
-				getContentPane().add(map);
+				MapSelection mapSel = new MapSelection(10);
+				getContentPane().add(mapSel);
 			}
 		});
+		
+		
 		
 		
 		
@@ -60,6 +62,7 @@ public class Driver extends JFrame{
 	public void paint(Graphics g){
 		
 		super.paint(g);
+		
 		
 	}
 	

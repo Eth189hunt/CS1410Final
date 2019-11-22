@@ -11,36 +11,49 @@ import javax.swing.JScrollPane;
 import javax.swing.JLabel;
 import javax.swing.SwingConstants;
 import java.awt.Font;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.io.File;
+
 import javax.swing.ScrollPaneConstants;
 import java.awt.CardLayout;
+import java.awt.Dimension;
+import java.awt.FlowLayout;
+
 import javax.swing.BoxLayout;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JSplitPane;
 
 public class MapSelection extends JPanel{
-	
+		
 	public MapSelection(int mapCount) {
 		setLayout(null);
 		
 		
 		
 		JLabel title = new JLabel("Map Selection");
+		title.setBounds(200, 40, 400, 40);
 		title.setFont(new Font("Tahoma", Font.PLAIN, 32));
 		title.setHorizontalAlignment(SwingConstants.CENTER);
-		title.setBounds(200, 40, 400, 40);
 		add(title);
 		
 		JPanel panel = new JPanel();
+		panel.setBounds(0, 0, (10 * (mapCount + 1) + 150 * mapCount), 180);
+		panel.setPreferredSize(new Dimension((10 * (mapCount + 1) + 150 * mapCount),180));
+		panel.setLayout(null);
 		
 		JPanel[] maps = new JPanel[mapCount];
 		
-		for(int v = 0; v < mapCount; v++) {
+		for(int v = 0; v < maps.length; v++) {
 			
 			maps[v] = new JPanel();
 			maps[v].setBounds((10 * (v + 1) + 150 * v), 11, 150, 159);
 			panel.add(maps[v]);
+			maps[v].setLayout(null);
 			
-			JPanel top = new JPanel();
+			ImageIcon topI = new ImageIcon("StoneWall.png");
+			JLabel top = new JLabel(topI);
 			top.setBounds(0, 0, 150, 120);
 			maps[v].add(top);
 			
@@ -48,14 +61,23 @@ public class MapSelection extends JPanel{
 			bottom.setBounds(0, 120, 150, 39);
 			maps[v].add(bottom);
 			
-			System.out.println((10 * (v + 1) + 150 * v));
+			bottom.addMouseListener(new MouseAdapter() {
+				@Override
+				public void mouseClicked(MouseEvent e) {
+					setVisible(false);
+					Game map = new Game(6);
+					getRootPane().getContentPane().add(map);
+				}
+			});
+			
+			//System.out.println((10 * (v + 1) + 150 * v));
 			
 		}
 		
 		JScrollPane scrollPane = new JScrollPane(panel);
+		scrollPane.setBounds(100, 200, 600, 200);
 		//scrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_NEVER);
 		scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS);
-		scrollPane.setBounds(100, 200, 600, 200);
 		add(scrollPane);
 		
 		/*JPanel panel_1 = new JPanel();
