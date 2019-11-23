@@ -3,4 +3,15 @@ StoneWall
 3 3
 50
 12 12
-
+E E E E E E E E E E E E
+S S S S S S T E E E E E
+E E E E E E D E E E E E
+E E E E E E D E E E E E
+E E E E E E D E E E E E
+E E E E E E L S S S S S
+E E E E E E E E E E E E
+E E E E E E E E E E E E
+E E E E E E E E E E E E
+E E E E E E E E E E E E
+E E E E E E E E E E E E
+E E E E E E E E E E E E

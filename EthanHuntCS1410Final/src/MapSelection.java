@@ -27,7 +27,7 @@ import javax.swing.JSplitPane;
 
 public class MapSelection extends JPanel{
 		
-	public MapSelection(int mapCount) {
+	public MapSelection(int mapCount, int mode) {
 		setLayout(null);
 		
 		
@@ -44,6 +44,13 @@ public class MapSelection extends JPanel{
 		panel.setLayout(null);
 		
 		JPanel[] maps = new JPanel[mapCount];
+		String[] mapFiles = new String[mapCount];
+		
+		for(int v = 0; v < mapFiles.length; v++) {
+			mapFiles[v] = "hi";
+		}
+		
+		mapFiles[0] = "WhiteStoneMap";
 		
 		for(int v = 0; v < maps.length; v++) {
 			
@@ -57,7 +64,7 @@ public class MapSelection extends JPanel{
 			top.setBounds(0, 0, 150, 120);
 			maps[v].add(top);
 			
-			JButton bottom = new JButton("Select");
+			JButton bottom = new JButton(mapFiles[v]);
 			bottom.setBounds(0, 120, 150, 39);
 			maps[v].add(bottom);
 			
@@ -65,7 +72,7 @@ public class MapSelection extends JPanel{
 				@Override
 				public void mouseClicked(MouseEvent e) {
 					setVisible(false);
-					Game map = new Game(6);
+					Game map = new Game(mode, 6, (bottom.getText() + ".txt"));
 					getRootPane().getContentPane().add(map);
 				}
 			});

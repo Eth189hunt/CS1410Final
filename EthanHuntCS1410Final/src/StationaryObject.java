@@ -1,3 +1,9 @@
+/*
+Name: Ethan Hunt
+Class: CS 1410-02
+Assignment: Final
+Date: 12/9/2019
+*/
 //stationary object to add to our window
 
 import java.awt.image.BufferedImage;

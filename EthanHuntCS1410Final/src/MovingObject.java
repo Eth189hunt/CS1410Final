@@ -1,3 +1,9 @@
+/*
+Name: Ethan Hunt
+Class: CS 1410-02
+Assignment: Final
+Date: 12/9/2019
+*/
 //stationary object to add to our window
 
 import java.awt.image.BufferedImage;
@@ -8,8 +14,8 @@ public class MovingObject extends StationaryObject
 {
 //Create instants variables to hold the needed velocities
 	
-	private int vx;
-	private int vy;
+	protected int vx;
+	protected int vy;
 
 	public MovingObject(int posx, int posy, BufferedImage bi, int imageW, int imageH, int vx, int vy)
 	{

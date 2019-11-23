@@ -25,6 +25,7 @@ public class MapGen extends JPanel{
 	private String image;
 	
 	private BufferedImage[][] pathImgs;
+	private String[][] pathFiles;
 	private int pathSize;
 	private int colPath;
 	private int rowPath;
@@ -52,7 +53,7 @@ public class MapGen extends JPanel{
 			bgImgs = new BufferedImage[col][row];
 			
 			//get pathSize
-			tileSize = mapFile.nextInt();
+			pathSize = mapFile.nextInt();
 			
 			//get pathcol
 			colPath = mapFile.nextInt();
@@ -61,9 +62,17 @@ public class MapGen extends JPanel{
 			rowPath = mapFile.nextInt();
 			
 			//pathImgs
-			pathImgs = new BufferedImage[col][row];
+			pathImgs = new BufferedImage[colPath][rowPath];
 			
+			//int pathfiles
+			pathFiles = new String[colPath][rowPath];
 			
+			//set pathfiles from map
+			for (int y = 0; y < rowPath; y++){
+				for (int x = 0; x < colPath; x++){
+					pathFiles[x][y] = mapFile.next() + ".png";
+				}
+			}
 			
 		}
 		catch(FileNotFoundException e) {
@@ -74,18 +83,18 @@ public class MapGen extends JPanel{
 	public void addPictures() {
 		for (int y = 0; y < row; y++){
 			for (int x = 0; x < col; x++){
-				addPicture(x, y, bgImgs);
+				addPicture(x, y);
 			}
 		}
 		
-		for (int y = 0; y < rowPath; y++){
-			for (int x = 0; x < colPath; x++){
-				addPicture(x, y, pathImgs);
+		for(int y = 0; y < rowPath; y++) {
+			for(int x = 0; x < colPath; x++) {
+				addPath(x, y, pathFiles[x][y]);
 			}
 		}
 	}
 	
-	public void addPicture(int x, int y, BufferedImage[][] imgs){
+	public void addPicture(int x, int y){
 		if (x < 0 || x >= col){
 			System.err.println("There is no col " + x);
 		}
@@ -94,7 +103,23 @@ public class MapGen extends JPanel{
 		}
 		else{
 				try {
-					imgs[x][y] = ImageIO.read(new File(image));
+					bgImgs[x][y] = ImageIO.read(new File(image));
+				} catch (IOException e) {
+					System.err.println("Unable to read the file: " + image);
+				}
+		}
+	}
+	
+	public void addPath(int x, int y, String image) {
+		if (x < 0 || x >= colPath){
+			System.err.println("There is no colPath " + x);
+		}
+		else if (y < 0 || y >= rowPath){
+			System.err.println("There is no rowPath " + y);
+		}
+		else{
+				try {
+					pathImgs[x][y] = ImageIO.read(new File(image));
 				} catch (IOException e) {
 					System.err.println("Unable to read the file: " + image);
 				}
@@ -108,12 +133,16 @@ public class MapGen extends JPanel{
 			}
 		}
 		
-		for (int y = 0; y < row; y++){
-			for (int x = 0; x < col; x++){
+		for (int y = 0; y < rowPath; y++){
+			for (int x = 0; x < colPath; x++){
 				g.drawImage(pathImgs[x][y], x*pathSize, y*pathSize, pathSize, pathSize, null);
 			}
 		}
 		
+	}
+	
+	public void paint(Graphics g) {
+		drawImage(g);
 	}
 	
 	public int getCol() {
@@ -122,6 +151,60 @@ public class MapGen extends JPanel{
 	
 	public int getRow() {
 		return row;
+	}
+	
+	public int[] getStart() {
+		//array for x and y value
+		int[] answer = new int[2];
+		
+		//first col for straight
+		for(int y = 0; y < rowPath; y++) {
+			if(pathFiles[0][y].equals("S.png")) {
+				answer[0] = 0;
+				answer[1] = y;
+				break;
+			}
+		}
+		
+		return answer;
+	}
+	
+	public int[] getEnd() {
+		//array for x and y value
+		int[] answer = new int[2];
+		
+		//top row for down
+		for(int x = 0; x < colPath; x++) {
+			if(pathFiles[x][0].equals("D.png")) {
+				answer[0] = x;
+				answer[1] = 0;
+				break;
+			}
+		}
+		
+		//bottow row for down if answer is not already set
+		if(answer != null) {
+			for(int x = 0; x < colPath; x++) {
+				if(pathFiles[x][(rowPath - 1)].equals("D.png")) {
+					answer[0] = x;
+					answer[1] = (rowPath - 1);
+					break;
+				}
+			}
+		}
+		
+		//right col for straight if answer is not already set
+				if(answer != null) {
+					for(int y = 0; y < rowPath; y++) {
+						if(pathFiles[(colPath - 1)][y].equals("S.png")) {
+							answer[0] = (colPath - 1);
+							answer[1] = y;
+							break;
+						}
+					}
+				}
+		
+		return answer;
 	}
 	
 }

@@ -38,6 +38,9 @@ public class Driver extends JFrame{
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				System.out.println("easy");
+				m.setVisible(false);
+				MapSelection mapSel = new MapSelection(10, 1);
+				getContentPane().add(mapSel);
 			}
 		});
 		
@@ -47,7 +50,7 @@ public class Driver extends JFrame{
 			public void mouseClicked(MouseEvent e) {
 				System.out.println("hard");
 				m.setVisible(false);
-				MapSelection mapSel = new MapSelection(10);
+				MapSelection mapSel = new MapSelection(10, 2);
 				getContentPane().add(mapSel);
 			}
 		});

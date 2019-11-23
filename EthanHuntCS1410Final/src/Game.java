@@ -10,7 +10,6 @@ import javax.swing.JPanel;
 import javax.swing.border.LineBorder;
 import java.awt.Color;
 import java.awt.Dimension;
-
 import javax.swing.JLabel;
 import javax.swing.JScrollPane;
 import javax.swing.ScrollPaneConstants;
@@ -18,11 +17,20 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.SwingConstants;
 import java.awt.Font;
+import java.awt.Graphics;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.ArrayList;
 
 public class Game extends JPanel{
-	public Game(int types) {
+	
+	//vars
+	private int live;
+	private int money;
+	private int round;
+	private ArrayList<Enemy> enemies = new ArrayList<Enemy>();
+	
+	public Game(int mode, int types, String file) {
 		setLayout(null);
 		
 		JPanel controls = new JPanel();
@@ -30,17 +38,6 @@ public class Game extends JPanel{
 		controls.setBounds(0, 0, 200, 600);
 		add(controls);
 		controls.setLayout(null);
-		
-		JLabel money = new JLabel("Money:");
-		money.setHorizontalAlignment(SwingConstants.CENTER);
-		money.setBounds(10, 10, 180, 20);
-		controls.add(money);
-		
-		JLabel life = new JLabel("Live:");
-		life.setHorizontalAlignment(SwingConstants.CENTER);
-		life.setBounds(10, 35, 180, 20);
-		controls.add(life);
-		
 		
 		JPanel towersView = new JPanel();
 		towersView.setBounds(0,0,200,(20 + 70 * (types / 2) + 1));
@@ -62,11 +59,11 @@ public class Game extends JPanel{
 		
 		for(int v = 0; v < towerTypes.length / 2; v++) {
 			
-			towerTypes[(v + 3)] = new JPanel();
-			towerTypes[(v + 3)].setBounds(90, (20 + 70 * v), 50, 50);
-			towerTypes[(v + 3)].setBorder(new LineBorder(Color.DARK_GRAY));
-			towersView.add(towerTypes[(v + 3)]);
-			towerTypes[(v + 3)].setLayout(null);
+			towerTypes[(v + (towerTypes.length / 2))] = new JPanel();
+			towerTypes[(v + (towerTypes.length / 2))].setBounds(90, (20 + 70 * v), 50, 50);
+			towerTypes[(v + (towerTypes.length / 2))].setBorder(new LineBorder(Color.DARK_GRAY));
+			towersView.add(towerTypes[(v + (towerTypes.length / 2))]);
+			towerTypes[(v + (towerTypes.length / 2))].setLayout(null);
 			
 			
 		}
@@ -90,12 +87,12 @@ public class Game extends JPanel{
 		JScrollPane towersMenu = new JScrollPane(towersView);
 		towersMenu.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 		towersMenu.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
-		towersMenu.setBounds(10, 60, 180, 160);
+		towersMenu.setBounds(10, 60, 180, 240);
 		controls.add(towersMenu);
 		
 		JButton start = new JButton("Start");
 		start.setFont(new Font("Tahoma", Font.PLAIN, 24));
-		start.setBounds(10, 240, 180, 40);
+		start.setBounds(10, 310, 180, 40);
 		controls.add(start);
 		
 		Upgrades upgrades = new Upgrades();
@@ -147,9 +144,38 @@ public class Game extends JPanel{
 		label_2.setBounds(58, 40, 100, 20);
 		panel_6.add(label_2);*/
 		
-		GameMap map = new GameMap("WhiteStoneMap.txt");
+		BackGroundGen map = new BackGroundGen(file);
 		map.setBounds(200, 0, 600, 600);
 		add(map);
 		map.setLayout(null);
+		
+		//start lives 100 easy 50 hard
+		live = 100 / mode;
+		
+		//start money 100 easy 50 hard
+		money = 100 /  mode;
+		
+		//start round
+		round = 1;
+		
+		JLabel moneyL = new JLabel("Money: $" + money);
+		moneyL.setHorizontalAlignment(SwingConstants.CENTER);
+		moneyL.setBounds(10, 10, 180, 20);
+		controls.add(moneyL);
+		
+		JLabel liveL = new JLabel("Live: " + live);
+		liveL.setHorizontalAlignment(SwingConstants.CENTER);
+		liveL.setBounds(10, 35, 180, 20);
+		controls.add(liveL);
+		
+		JLabel roundL = new JLabel("Round: " + round);
+		roundL.setHorizontalAlignment(SwingConstants.CENTER);
+		roundL.setBounds(10, 355, 180, 20);
+		controls.add(roundL);
+		
+	}
+	
+	public void paint(Graphics g) {
+		super.paint(g);
 	}
 }
