@@ -44,6 +44,7 @@ public class Game extends JPanel{
 		towersView.setPreferredSize(new Dimension(200,(20 + 70 * (types / 2) + 1)));
 		towersView.setLayout(null);
 		
+		
 		JPanel towerTypes[] = new JPanel[types];
 		
 		for(int v = 0; v < towerTypes.length / 2; v++) {
