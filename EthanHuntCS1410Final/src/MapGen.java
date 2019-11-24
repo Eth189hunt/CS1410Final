@@ -207,4 +207,492 @@ public class MapGen extends JPanel{
 		return answer;
 	}
 	
+	public int countPath() {
+		int answer = 1;
+		int[] startPos = new int[2];
+		int x = 0;
+		int y = 0;
+		int preX = 0;
+		int preY = 0;
+		boolean loop = true;
+		
+		//get startPos
+		startPos = getStart();
+		
+		//set x and y
+		x = startPos[0];
+		y = startPos[1];
+		
+		//set prevX and prevY to on back of start so that it count backwards
+		preX = startPos[0] - 1;
+		preY = startPos[1];
+		
+		//get next path location
+		while(loop) {
+			switch(pathFiles[x][y]) {
+				case "S.png":
+					//check if should got forward or backward
+					if(preX < x) {
+						//new pre
+						preY = y;
+						preX = x;
+						
+						//move then check next position
+						x++;
+						if(x < colPath) {
+							//increase answer
+							answer++;
+						}
+						else {
+							x--;
+							loop = false;
+						}
+					}
+					else {
+						//new pre
+						preY = y;
+						preX = x;
+						
+						//move then check next position
+						x--;
+						if(x >= 0) {
+							//increase answer
+							answer++;
+						}
+						else {
+							x++;
+							loop = false;
+						}
+					}
+				break;
+				case "D.png":
+					//check if should got forward or backward
+					if(preY < y) {
+						//new pre
+						preY = y;
+						preX = x;
+						
+						//move then check next position
+						y++;
+						if(y < rowPath) {
+							//increase answer
+							answer++;
+						}
+						else {
+							y--;
+							loop = false;
+						}
+					}
+					else {
+						//new pre
+						preY = y;
+						preX = x;
+						
+						//move then check next position
+						y--;
+						if(y >= 0) {
+							//increase answer
+							answer++;
+						}
+						else {
+							y++;
+							loop = false;
+						}
+					}
+				break;
+				case "L.png":
+					//check if should got forward or backward
+					if(preY != y) {
+						//new pre
+						preY = y;
+						preX = x;
+						
+						//move then check next position
+						x++;
+						if(x < colPath) {
+							//increase answer
+							answer++;
+						}
+						else {
+							x--;
+							loop = false;
+						}
+					}
+					else {
+						//new pre
+						preY = y;
+						preX = x;
+						
+						//move then check next position
+						y--;
+						if(y >= 0) {
+							//increase answer
+							answer++;
+						}
+						else {
+							y++;
+							loop = false;
+						}
+					}
+				break;
+				case "R.png":
+					//check if should got forward or backward
+					if(preY != y) {
+						//new pre
+						preY = y;
+						preX = x;
+						
+						//move then check next position
+						x--;
+						if(x >= 0) {
+							//increase answer
+							answer++;
+						}
+						else {
+							x++;
+							loop = false;
+						}
+					}
+					else {
+						//new pre
+						preY = y;
+						preX = x;
+						
+						//move then check next position
+						y--;
+						if(y < rowPath) {
+							//increase answer
+							answer++;
+						}
+						else {
+							y++;
+							loop = false;
+						}
+					}
+				break;
+				case "F.png":
+					//check if should got forward or backward
+					if(preY != y) {
+						//new pre
+						preY = y;
+						preX = x;
+						
+						//move then check next position
+						x++;
+						if(x < colPath) {
+							//increase answer
+							answer++;
+						}
+						else {
+							x--;
+							loop = false;
+						}
+					}
+					else {
+						//new pre
+						preY = y;
+						preX = x;
+						
+						//move then check next position
+						y++;
+						if(y < rowPath) {
+							//increase answer
+							answer++;
+						}
+						else {
+							y--;
+							loop = false;
+						}
+					}
+				break;
+				case "T.png":
+					//check if should got forward or backward
+					if(preY != y) {
+						//new pre
+						preY = y;
+						preX = x;
+						
+						//move then check next position
+						x--;
+						if(x >= 0) {
+							//increase answer
+							answer++;
+						}
+						else {
+							x++;
+							loop = false;
+						}
+					}
+					else {
+						//new pre
+						preY = y;
+						preX = x;
+						
+						//move then check next position
+						y++;
+						if(y < rowPath) {
+							//increase answer
+							answer++;
+						}
+						else {
+							y--;
+							loop = false;
+						}
+					}
+				break;
+			}
+		}
+		
+		return answer;
+	}
+	
+	public String[] getPath() {
+		//vars
+		String[] answer = new String[countPath()];
+		int[] startPos = new int[2];
+		int x = 0;
+		int y = 0;
+		int preX = 0;
+		int preY = 0;
+		boolean loop = true;
+		
+		//get startPos
+		startPos = getStart();
+		
+		//set x and y
+		x = startPos[0];
+		y = startPos[1];
+		
+		//set prevX and prevY to on back of start so that it count backwards
+		preX = startPos[0] - 1;
+		preY = startPos[1];
+		
+		//set start for path
+		answer[0] = pathFiles[x][y];
+		
+		//main loop path
+		//next item in path
+		for(int i = 1; i < answer.length; i++) {
+			switch(pathFiles[x][y]) {
+				case "S.png":
+					//check if should got forward or backward
+					if(preX < x) {
+						//new pre
+						preY = y;
+						preX = x;
+						
+						//move then check next position
+						x++;
+						if(x < colPath) {
+							//set string answer and increase pathCount
+							answer[i] = pathFiles[x][y];
+						}
+						else {
+							x--;
+							loop = false;
+						}
+					}
+					else {
+						//new pre
+						preY = y;
+						preX = x;
+						
+						//move then check next position
+						x--;
+						if(x >= 0) {
+							//set string answer and increase pathCount
+							answer[i] = pathFiles[x][y];
+						}
+						else {
+							x++;
+							loop = false;
+						}
+					}
+				break;
+				case "D.png":
+					//check if should got forward or backward
+					if(preY < y) {
+						//new pre
+						preY = y;
+						preX = x;
+						
+						//move then check next position
+						y++;
+						if(y < rowPath) {
+							//set string answer and increase pathCount
+							answer[i] = pathFiles[x][y];
+						}
+						else {
+							y--;
+							loop = false;
+						}
+					}
+					else {
+						//new pre
+						preY = y;
+						preX = x;
+						
+						//move then check next position
+						y--;
+						if(y >= 0) {
+							//set string answer and increase pathCount
+							answer[i] = pathFiles[x][y];
+						}
+						else {
+							y++;
+							loop = false;
+						}
+					}
+				break;
+				case "L.png":
+					//check if should got forward or backward
+					if(preY != y) {
+						//new pre
+						preY = y;
+						preX = x;
+						
+						//move then check next position
+						x++;
+						if(x < colPath) {
+							//set string answer and increase pathCount
+							answer[i] = pathFiles[x][y];
+						}
+						else {
+							x--;
+							loop = false;
+						}
+					}
+					else {
+						//new pre
+						preY = y;
+						preX = x;
+						
+						//move then check next position
+						y--;
+						if(y >= 0) {
+							//set string answer and increase pathCount
+							answer[i] = pathFiles[x][y];
+						}
+						else {
+							y++;
+							loop = false;
+						}
+					}
+				break;
+				case "R.png":
+					//check if should got forward or backward
+					if(preY != y) {
+						//new pre
+						preY = y;
+						preX = x;
+						
+						//move then check next position
+						x--;
+						if(x >= 0) {
+							//set string answer and increase pathCount
+							answer[i] = pathFiles[x][y];
+						}
+						else {
+							x++;
+							loop = false;
+						}
+					}
+					else {
+						//new pre
+						preY = y;
+						preX = x;
+						
+						//move then check next position
+						y--;
+						if(y < rowPath) {
+							//set string answer and increase pathCount
+							answer[i] = pathFiles[x][y];
+						}
+						else {
+							y++;
+							loop = false;
+						}
+					}
+				break;
+				case "F.png":
+					//check if should got forward or backward
+					if(preY != y) {
+						//new pre
+						preY = y;
+						preX = x;
+						
+						//move then check next position
+						x++;
+						if(x < colPath) {
+							//set string answer and increase pathCount
+							answer[i] = pathFiles[x][y];
+						}
+						else {
+							x--;
+							loop = false;
+						}
+					}
+					else {
+						//new pre
+						preY = y;
+						preX = x;
+						
+						//move then check next position
+						y++;
+						if(y < rowPath) {
+							//set string answer and increase pathCount
+							answer[i] = pathFiles[x][y];
+						}
+						else {
+							y--;
+							loop = false;
+						}
+					}
+				break;
+				case "T.png":
+					//check if should got forward or backward
+					if(preY != y) {
+						//new pre
+						preY = y;
+						preX = x;
+						
+						//move then check next position
+						x--;
+						if(x >= 0) {
+							//set string answer and increase pathCount
+							answer[i] = pathFiles[x][y];
+						}
+						else {
+							x++;
+							loop = false;
+						}
+					}
+					else {
+						//new pre
+						preY = y;
+						preX = x;
+						
+						//move then check next position
+						y++;
+						if(y < rowPath) {
+							//set string answer and increase pathCount
+							answer[i] = pathFiles[x][y];
+						}
+						else {
+							y--;
+							loop = false;
+						}
+					}
+				break;
+			}
+			
+			//end early if out of bound error
+			if(!loop) {
+				break;
+			}
+		}
+		
+		return answer;
+	}
+	
 }

@@ -29,6 +29,7 @@ public class Game extends JPanel{
 	private int money;
 	private int round;
 	private ArrayList<Enemy> enemies = new ArrayList<Enemy>();
+	private boolean movement;
 	
 	public Game(int mode, int types, String file) {
 		setLayout(null);
@@ -174,9 +175,18 @@ public class Game extends JPanel{
 		roundL.setBounds(10, 355, 180, 20);
 		controls.add(roundL);
 		
+		
+		
 	}
 	
 	public void paint(Graphics g) {
 		super.paint(g);
+		
+		//print 
+		
+		//check that lives is good
+		if(live > 0) {
+			
+		}
 	}
 }

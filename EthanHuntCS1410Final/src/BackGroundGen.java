@@ -26,6 +26,7 @@ public class BackGroundGen extends JPanel{
 		//find map start and end
 		startPos = bg.getStart();
 		endPos  = bg.getEnd();
+		
 	}
 		
 	
@@ -43,4 +44,7 @@ public class BackGroundGen extends JPanel{
 		return endPos;
 	}
 	
+	public String[] getPathString() {
+		return bg.getPath();
+	}
 }

@@ -1,3 +1,4 @@
+import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 
 /*
@@ -16,6 +17,13 @@ public class Enemy extends MovingObject{
 		this.strength = strength;
 	}
 	
+	public void drawImage(Graphics g){
+		//draws the image but with corner to right side 
+		g.drawImage(bi, posx - imageW, posy, imageW, imageH, null);
+	}
 	
+	public void moveImage(Graphics g, String[] path) {
+		
+	}
 
 }
