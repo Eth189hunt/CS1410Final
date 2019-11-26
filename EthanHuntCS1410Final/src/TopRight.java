@@ -29,9 +29,16 @@ public class TopRight extends Path {
 				answer[1] = 2;
 			}
 		}
-		//down left
+		//up left
 		else {
-			answer[1] = -2;
+			//up
+			if(current <= 21) {
+				answer[1] = -2;
+			}
+			//left
+			if(current > 21) {
+				answer[0] = -2;
+			}
 		}
 		
 		return answer;
@@ -48,8 +55,8 @@ public class TopRight extends Path {
 		}
 		//reversed
 		else {
-			answer[0] = (x * 50) + 38;
-			answer[1] = (y * 50) + 6;
+			answer[0] = (x * 50) + 44;
+			answer[1] = ((y + 1) * 50);
 		}
 		
 		return answer;

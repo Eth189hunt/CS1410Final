@@ -808,7 +808,7 @@ public class MapGen extends JPanel{
 				case "L.png":
 					//check if should got forward or backward
 					if(preY != y) {
-						//create path with reverse
+						//create path without reverse
 						answer[count] = new Left(preX, preY, x, y, false, pathFiles[x][y]);
 						
 						//new pre

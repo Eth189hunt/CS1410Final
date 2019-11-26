@@ -42,7 +42,7 @@ public class Down extends Path {
 		//reversed
 		else {
 			answer[0] = (x * 50) + 44;
-			answer[1] = ((y + 1) * 50) + 38;
+			answer[1] = ((y + 1) * 50);
 		}
 		
 		return answer;

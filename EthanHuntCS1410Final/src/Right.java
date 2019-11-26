@@ -20,7 +20,14 @@ public class Right extends Path {
 		
 		//go right up
 		if(!reverse) {
-			answer[1] = 2;
+			//right
+			if(current <= 21) {
+				answer[0] = 2;
+			}
+			
+			if(current > 21) {
+				answer[1] = -2;
+			}
 		}
 		//go down left
 		else {
@@ -49,7 +56,7 @@ public class Right extends Path {
 		//reversed
 		else {
 			answer[0] = (x * 50) + 44;
-			answer[1] = (y * 50) + 12
+			answer[1] = (y * 50) - 38;
 		}
 		
 		return answer;

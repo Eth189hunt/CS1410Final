@@ -18,13 +18,27 @@ public class Left extends Path {
 	public int[] move(int current) {
 		int[] answer = new int[2];
 		
-		//go right
+		//go down right
 		if(!reverse) {
-			answer[1] = 2;
+			//down
+			if(current <= 21) {
+				answer[1] = 2;
+			}
+			//right
+			if(current > 21) {
+				answer[0] = 2;
+			}
 		}
-		//go left for reverse
+		//go left up
 		else {
-			answer[1] = -2;
+			//left
+			if(current <= 21) {
+				answer[0] = -2;
+			}
+			//up
+			if(current > 21) {
+				answer[1] = -2;
+			}
 		}
 		
 		return answer;
@@ -36,12 +50,12 @@ public class Left extends Path {
 		//stat positions
 		//normal
 		if(!reverse) {
-			answer[0] = x * 50;
-			answer[1] = (y * 50) + 6;
+			answer[0] = (x * 50) + 44;
+			answer[1] = (y * 50) - 38;
 		}
 		//reversed
 		else {
-			answer[0] = (x * 50) + 38;
+			answer[0] = ((x + 1) * 50) + 38;
 			answer[1] = (y * 50) + 6;
 		}
 		
