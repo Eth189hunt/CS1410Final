@@ -13,6 +13,7 @@ import java.awt.Dimension;
 import javax.swing.JLabel;
 import javax.swing.JScrollPane;
 import javax.swing.ScrollPaneConstants;
+import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.SwingConstants;
@@ -20,6 +21,9 @@ import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 
 public class Game extends JPanel{
@@ -30,6 +34,7 @@ public class Game extends JPanel{
 	private int round;
 	private ArrayList<Enemy> enemies = new ArrayList<Enemy>();
 	private boolean movement;
+	private Path[] path;
 	
 	public Game(int mode, int types, String file) {
 		setLayout(null);
@@ -146,7 +151,7 @@ public class Game extends JPanel{
 		label_2.setBounds(58, 40, 100, 20);
 		panel_6.add(label_2);*/
 		
-		BackGroundGen map = new BackGroundGen(file);
+		MapLoad map = new MapLoad(file);
 		map.setBounds(200, 0, 600, 600);
 		add(map);
 		map.setLayout(null);
@@ -175,18 +180,6 @@ public class Game extends JPanel{
 		roundL.setBounds(10, 355, 180, 20);
 		controls.add(roundL);
 		
-		
-		
 	}
 	
-	public void paint(Graphics g) {
-		super.paint(g);
-		
-		//print 
-		
-		//check that lives is good
-		if(live > 0) {
-			
-		}
-	}
 }

@@ -695,4 +695,284 @@ public class MapGen extends JPanel{
 		return answer;
 	}
 	
+	public Path[] getPathObjects() {
+		Path answer[] = new Path[countPath()];
+		
+		//vars
+		int[] startPos = new int[2];
+		int x = 0;
+		int y = 0;
+		int preX = 0;
+		int preY = 0;
+		boolean loop = true;
+		int count = 0;
+		
+		//get startPos
+		startPos = getStart();
+		
+		//set x and y
+		x = startPos[0];
+		y = startPos[1];
+		
+		//set prevX and prevY to on back of start so that it count backwards
+		preX = startPos[0] - 1;
+		preY = startPos[1];
+		
+		//start loop
+		while(loop) {
+			switch(pathFiles[x][y]) {
+				case "S.png":
+					//check if should got forward or backward
+					if(preX < x) {
+						//create path without reverse
+						answer[count] = new Straight(preX, preY, x, y, false, pathFiles[x][y]);
+						
+						//set up for next path
+						//new pre
+						preY = y;
+						preX = x;
+						
+						//move then check next position
+						x++;
+						if(x < colPath) {
+							//increase count
+							count++;
+						}
+						else {
+							x--;
+							loop = false;
+						}
+					}
+					else {
+						//create path with reverse
+						answer[count] = new Straight(preX, preY, x, y, true, pathFiles[x][y]);
+						
+						//set up for next path
+						//new pre
+						preY = y;
+						preX = x;
+						
+						//move then check next position
+						x--;
+						if(x >= 0) {
+							//increase count
+							count++;
+						}
+						else {
+							x++;
+							loop = false;
+						}
+					}
+				break;
+				case "D.png":
+					//check if should got forward or backward
+					if(preY < y) {
+						//create path without reverse
+						answer[count] = new Down(preX, preY, x, y, false, pathFiles[x][y]);
+						
+						//new pre
+						preY = y;
+						preX = x;
+						
+						//move then check next position
+						y++;
+						if(y < rowPath) {
+							//increase count
+							count++;
+						}
+						else {
+							y--;
+							loop = false;
+						}
+					}
+					else {
+						//create path with reverse
+						answer[count] = new Down(preX, preY, x, y, true, pathFiles[x][y]);
+						
+						//new pre
+						preY = y;
+						preX = x;
+						
+						//move then check next position
+						y--;
+						if(y >= 0) {
+							//increase count
+							count++;
+						}
+						else {
+							y++;
+							loop = false;
+						}
+					}
+				break;
+				case "L.png":
+					//check if should got forward or backward
+					if(preY != y) {
+						//create path with reverse
+						answer[count] = new Left(preX, preY, x, y, false, pathFiles[x][y]);
+						
+						//new pre
+						preY = y;
+						preX = x;
+						
+						//move then check next position
+						x++;
+						if(x < colPath) {
+							//increase count
+							count++;
+						}
+						else {
+							x--;
+							loop = false;
+						}
+					}
+					else {
+						//create path with reverse
+						answer[count] = new Left(preX, preY, x, y, true, pathFiles[x][y]);
+						
+						//new pre
+						preY = y;
+						preX = x;
+						
+						//move then check next position
+						y--;
+						if(y >= 0) {
+							//increase count
+							count++;
+						}
+						else {
+							y++;
+							loop = false;
+						}
+					}
+				break;
+				case "R.png":
+					//check if should got forward or backward
+					if(preY != y) {
+						//create path with reverse
+						answer[count] = new Right(preX, preY, x, y, true, pathFiles[x][y]);
+						
+						//new pre
+						preY = y;
+						preX = x;
+						
+						//move then check next position
+						x--;
+						if(x >= 0) {
+							//increase count
+							count++;
+						}
+						else {
+							x++;
+							loop = false;
+						}
+					}
+					else {
+						//create path without reverse
+						answer[count] = new Right(preX, preY, x, y, false, pathFiles[x][y]);
+						
+						//new pre
+						preY = y;
+						preX = x;
+						
+						//move then check next position
+						y--;
+						if(y < rowPath) {
+							//increase count
+							count++;
+						}
+						else {
+							y++;
+							loop = false;
+						}
+					}
+				break;
+				case "F.png":
+					//check if should got forward or backward
+					if(preY != y) {
+						//create path with reverse
+						answer[count] = new TopLeft(preX, preY, x, y, false, pathFiles[x][y]);
+						
+						//new pre
+						preY = y;
+						preX = x;
+						
+						//move then check next position
+						x++;
+						if(x < colPath) {
+							//increase count
+							count++;
+						}
+						else {
+							x--;
+							loop = false;
+						}
+					}
+					else {
+						//create path with reverse
+						answer[count] = new TopLeft(preX, preY, x, y, true, pathFiles[x][y]);
+						
+						//new pre
+						preY = y;
+						preX = x;
+						
+						//move then check next position
+						y++;
+						if(y < rowPath) {
+							//increase count
+							count++;
+						}
+						else {
+							y--;
+							loop = false;
+						}
+					}
+				break;
+				case "T.png":
+					//check if should got forward or backward
+					if(preY != y) {
+						//create path with reverse
+						answer[count] = new TopRight(preX, preY, x, y, true, pathFiles[x][y]);
+						
+						//new pre
+						preY = y;
+						preX = x;
+						
+						//move then check next position
+						x--;
+						if(x >= 0) {
+							//increase count
+							count++;
+						}
+						else {
+							x++;
+							loop = false;
+						}
+					}
+					else {
+						//create path without reverse
+						answer[count] = new TopRight(preX, preY, x, y, false, pathFiles[x][y]);
+						
+						//new pre
+						preY = y;
+						preX = x;
+						
+						//move then check next position
+						y++;
+						if(y < rowPath) {
+							//increase count
+							count++;
+						}
+						else {
+							y--;
+							loop = false;
+						}
+					}
+				break;
+			}
+		}
+		
+		return answer;
+	}
+	
 }
