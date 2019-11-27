@@ -20,11 +20,11 @@ public class Down extends Path {
 		
 		//go down
 		if(!reverse) {
-			answer[1] = 2;
+			answer[1] = 1;
 		}
 		//go up
 		else {
-			answer[1] = -2;
+			answer[1] = -1;
 		}
 		
 		return answer;
@@ -33,7 +33,7 @@ public class Down extends Path {
 	public int[] start() {
 		int[] answer = new int[2];
 		
-		//stat positions
+		//start positions
 		//normal
 		if(!reverse) {
 			answer[0] = (x * 50) + 44;

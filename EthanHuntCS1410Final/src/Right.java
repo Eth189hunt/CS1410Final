@@ -22,22 +22,22 @@ public class Right extends Path {
 		if(!reverse) {
 			//right
 			if(current <= 21) {
-				answer[0] = 2;
+				answer[0] = 1;
 			}
 			
 			if(current > 21) {
-				answer[1] = -2;
+				answer[1] = -1;
 			}
 		}
 		//go down left
 		else {
 			//down
 			if(current <= 21) {
-				answer[1] = 2;
+				answer[1] = 1;
 			}
 			//left
 			if(current > 21) {
-				answer[0] = -2;
+				answer[0] = -1;
 			}
 		}
 		
@@ -47,7 +47,7 @@ public class Right extends Path {
 	public int[] start() {
 		int[] answer = new int[2];
 		
-		//stat positions
+		//start positions
 		//normal
 		if(!reverse) {
 			answer[0] = x * 50;

@@ -5,6 +5,7 @@ Assignment: Final
 Date: 12/9/2019
 */
 
+import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.event.MouseAdapter;
@@ -20,7 +21,7 @@ public class Driver extends JFrame{
 	public static void main(String[] args) {
 		
 		Driver window = new Driver();
-		window.setSize(800, 640);
+		window.setSize(816,640);
 		window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		window.setVisible(true);
 		

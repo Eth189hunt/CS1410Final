@@ -27,6 +27,7 @@ public abstract class Path {
 		this.type = type;
 	}
 	
+	
 	public int getPrex() {
 		return prex;
 	}

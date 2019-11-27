@@ -6,7 +6,9 @@ Date: 12/9/2019
 */
 
 public class Straight extends Path {
-
+	
+	
+	
 	public Straight() {
 		super();
 	}
@@ -20,11 +22,11 @@ public class Straight extends Path {
 		
 		//go right
 		if(!reverse) {
-			answer[0] = 2;
+			answer[0] = 1;
 		}
 		//go left for reverse
 		else {
-			answer[0] = -2;
+			answer[0] = -1;
 		}
 		
 		return answer;
@@ -33,7 +35,7 @@ public class Straight extends Path {
 	public int[] start() {
 		int[] answer = new int[2];
 		
-		//stat positions
+		//start positions
 		//normal
 		if(!reverse) {
 			answer[0] = x * 50;

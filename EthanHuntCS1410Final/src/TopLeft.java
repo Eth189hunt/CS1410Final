@@ -22,23 +22,23 @@ public class TopLeft extends Path {
 		if(!reverse) {
 			//up
 			if(current <= 21) {
-				answer[1] = -2;
+				answer[1] = -1;
 			}
 			//right
 			if(current > 21) {
-				answer[0] = 2;
+				answer[0] = 1;
 			}
 		}
 		//go left down
 		else {
 			//left
 			if(current <= 21) {
-				answer[0] = -2;
+				answer[0] = -1;
 			}
 			
 			//down
 			if(current > 21) {
-				answer[1] = 2;
+				answer[1] = 1;
 			}
 		}
 		
@@ -48,7 +48,7 @@ public class TopLeft extends Path {
 	public int[] start() {
 		int[] answer = new int[2];
 		
-		//stat positions
+		//start positions
 		//normal
 		if(!reverse) {
 			answer[0] = (x * 50) + 44;

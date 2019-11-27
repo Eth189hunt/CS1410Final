@@ -28,14 +28,6 @@ import java.util.ArrayList;
 
 public class Game extends JPanel{
 	
-	//vars
-	private int live;
-	private int money;
-	private int round;
-	private ArrayList<Enemy> enemies = new ArrayList<Enemy>();
-	private boolean movement;
-	private Path[] path;
-	
 	public Game(int mode, int types, String file) {
 		setLayout(null);
 		
@@ -151,34 +143,35 @@ public class Game extends JPanel{
 		label_2.setBounds(58, 40, 100, 20);
 		panel_6.add(label_2);*/
 		
-		MapLoad map = new MapLoad(file);
+		MapLoad map = new MapLoad(mode, file);
 		map.setBounds(200, 0, 600, 600);
 		add(map);
 		map.setLayout(null);
 		
-		//start lives 100 easy 50 hard
-		live = 100 / mode;
 		
-		//start money 100 easy 50 hard
-		money = 100 /  mode;
-		
-		//start round
-		round = 1;
-		
-		JLabel moneyL = new JLabel("Money: $" + money);
+		JLabel moneyL = new JLabel("Money: ");
 		moneyL.setHorizontalAlignment(SwingConstants.CENTER);
 		moneyL.setBounds(10, 10, 180, 20);
 		controls.add(moneyL);
 		
-		JLabel liveL = new JLabel("Live: " + live);
+		JLabel liveL = new JLabel("Live: ");
 		liveL.setHorizontalAlignment(SwingConstants.CENTER);
 		liveL.setBounds(10, 35, 180, 20);
 		controls.add(liveL);
 		
-		JLabel roundL = new JLabel("Round: " + round);
+		JLabel roundL = new JLabel("Round: ");
 		roundL.setHorizontalAlignment(SwingConstants.CENTER);
 		roundL.setBounds(10, 355, 180, 20);
 		controls.add(roundL);
+		
+		
+		//start action
+		start.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				map.start();
+			}
+		});
 		
 	}
 	
