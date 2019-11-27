@@ -22,7 +22,7 @@ public class MapLoad extends JPanel{
 	private int[] endPos;
 	private ArrayList<Enemy> enemies = new ArrayList<Enemy>();
 	private Enemy enemies2[] = new Enemy[2];
-	private boolean movement;
+	private int movement;
 	private int enemiesPrint;
 	private Enemy e1;
 	private Enemy e2;
@@ -53,35 +53,57 @@ public class MapLoad extends JPanel{
 		//start money 100 easy 50 hard
 		money = 100 /  mode;
 		
-		//loadTypes of enemies
-		
-		
-		
 	}
 		
 	
 	public void paint(Graphics g) {
 		super.paint(g);
 		
-		//show back ground
-		bg.paint(g);
-		
 		//go if lives good
 		if(live > 0) {
+			//show back ground
+			bg.paint(g);
+			
 			//start enemies if movement enabled
-			if(movement == true) {
-				//create enemies
-				for(int v = 0; v < enemies.size(); v++) {
-					if((v - 1) == -1 || enemies.get(v - 1).getPathPos() > 0) {
-						enemies.get(v).moveImage(g);
+			switch(movement) {
+				case 1:
+					//have enemies moving
+					for(int v = 0; v < enemies.size(); v++) {
+						if((v - 1) == -1 || enemies.get(v - 1).getPathPos() > 0) {
+							//move enemies with boolean return
+							if(enemies.get(v).moveImage(g)) {
+								//not at end yet
+							}else {
+								//at end so reduce live
+								live--;
+								
+								//also need to delete this one
+								enemies.remove(v);
+							}
+						}
 					}
-				}
+				break;
+				case 2:
+					//have enemies paused
+					for(int v = 0; v < enemies.size(); v++) {
+						if((v - 1) == -1 || enemies.get(v - 1).getPathPos() > 0) {
+							enemies.get(v).drawImageStatic(g);
+						}
+					}
+				break;
+				default:
+					//not printing enemies
+				break;
 				
 			}
 		}
+		//make it disappear
+		else {
+			this.setVisible(false);
+		}
 		
 		try {
-			Thread.sleep(35);
+			Thread.sleep(5);
 		}catch(Exception e) {
 			System.out.println(e);
 		}
@@ -94,11 +116,29 @@ public class MapLoad extends JPanel{
 		//increase round
 		round++;
 		
+		//increase money depending round
+		money+=((round - 1) * 50);
+		
 		//create enemies
 		loadEnemies();
 		
 		//enable movement
-		movement = true;
+		movement = 1;
+	}
+	
+	public void pause() {
+		//pause movement
+		movement = 2;
+	}
+	
+	public void unpause() {
+		//unpause movement so set to 1
+		movement = 1;
+	}
+	
+	public void end() {
+		//stop movement
+		movement = 0;
 	}
 	
 	public void loadEnemies() {
@@ -197,6 +237,10 @@ public class MapLoad extends JPanel{
 			System.out.println(E);
 		}
 		
+	}
+	
+	public int getEnemiesCount() {
+		return enemies.size();
 	}
 	
 	public int getLive() {

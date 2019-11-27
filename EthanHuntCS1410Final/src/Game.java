@@ -28,6 +28,11 @@ import java.util.ArrayList;
 
 public class Game extends JPanel{
 	
+	private JLabel moneyL;
+	private JLabel liveL;
+	private JLabel roundL;
+	private MapLoad map;
+	
 	public Game(int mode, int types, String file) {
 		setLayout(null);
 		
@@ -94,6 +99,22 @@ public class Game extends JPanel{
 		start.setBounds(10, 310, 180, 40);
 		controls.add(start);
 		
+		//game over screen
+		JLabel overT = new JLabel("Game Over");
+		overT.setHorizontalAlignment(SwingConstants.CENTER);
+		overT.setBounds(400, 220, 200, 20);
+		add(overT);
+		
+		JLabel overT2 = new JLabel("Click to go to main screen");
+		overT2.setHorizontalAlignment(SwingConstants.CENTER);
+		overT2.setBounds(400, 240, 200, 20);
+		add(overT2);
+		
+		JButton over = new JButton("End Game");
+		over.setFont(new Font("Tahoma", Font.PLAIN, 24));
+		over.setBounds(400, 260, 200, 40);
+		add(over);
+		
 		Upgrades upgrades = new Upgrades();
 		upgrades.setBounds(10, 410, 180, 180);
 		upgrades.setBorder(new LineBorder(Color.DARK_GRAY));
@@ -143,23 +164,23 @@ public class Game extends JPanel{
 		label_2.setBounds(58, 40, 100, 20);
 		panel_6.add(label_2);*/
 		
-		MapLoad map = new MapLoad(mode, file);
+		map = new MapLoad(mode, file);
 		map.setBounds(200, 0, 600, 600);
 		add(map);
 		map.setLayout(null);
 		
 		
-		JLabel moneyL = new JLabel("Money: ");
+		moneyL = new JLabel("Money: " + map.getMoney());
 		moneyL.setHorizontalAlignment(SwingConstants.CENTER);
 		moneyL.setBounds(10, 10, 180, 20);
 		controls.add(moneyL);
 		
-		JLabel liveL = new JLabel("Live: ");
+		liveL = new JLabel("Live: " + map.getLive());
 		liveL.setHorizontalAlignment(SwingConstants.CENTER);
 		liveL.setBounds(10, 35, 180, 20);
 		controls.add(liveL);
 		
-		JLabel roundL = new JLabel("Round: ");
+		roundL = new JLabel("Round: " + map.getRound());
 		roundL.setHorizontalAlignment(SwingConstants.CENTER);
 		roundL.setBounds(10, 355, 180, 20);
 		controls.add(roundL);
@@ -169,10 +190,51 @@ public class Game extends JPanel{
 		start.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				map.start();
+				//for is start
+				if(start.getText().equals("Start")) {
+					start.setText("Pause/End");
+					map.start();
+					
+					//get and set money, live, round
+					moneyL.setText("Money: " + map.getMoney());
+					liveL.setText("Live: " + map.getLive());
+					roundL.setText("Round: " + map.getRound());
+				}
+				//for pause/end
+				else if(start.getText().equals("Pause/End")) {
+					//if enemies on map still then freze map
+					if(map.getEnemiesCount() != 0) {
+						start.setText("UnPause");
+						map.pause();
+					}
+					//if not then end round
+					else {
+						start.setText("Start");
+						map.end();
+					}
+					
+					//get and set money, live, round
+					moneyL.setText("Money: " + map.getMoney());
+					liveL.setText("Live: " + map.getLive());
+					roundL.setText("Round: " + map.getRound());
+				}
+				//for unpause
+				else if(start.getText().equals("UnPause")) {
+					start.setText("Pause/End");
+					map.unpause();
+					
+					//get and set money, live, round
+					moneyL.setText("Money: " + map.getMoney());
+					liveL.setText("Live: " + map.getLive());
+					roundL.setText("Round: " + map.getRound());
+				}
 			}
 		});
 		
+		
+		
 	}
+	
+	
 	
 }

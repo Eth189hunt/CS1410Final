@@ -8,27 +8,17 @@ Assignment: Final
 Date: 12/9/2019
 */
 
-public class Enemy{
+public class Enemy extends MovingObject{
 	
 	private int health;
 	private int strength;
 	private int pathPos;
 	private int pathDistance;
 	private int moveSpeed;
-	private int posx; 
-	private int posy;
-	private BufferedImage bi; 
-	private int imageW;
-	private int imageH;
 	private Path[] path;
 	
 	public Enemy(int posx, int posy, BufferedImage bi, int health, int strength, Path[] path) {
-		//super(posx, posy, bi, 38, 38, 2, 2);
-		this.posx = posx;
-		this.posy = posy; 
-		this.bi= bi;
-		this.imageW = 38; 
-		this.imageH = 38;
+		super(posx, posy, bi, 38, 38, 2, 2);
 		this.health = health;
 		this.strength = strength;
 		this.pathPos = -1;
@@ -40,6 +30,11 @@ public class Enemy{
 	public void drawImage(Graphics g, int xDir, int yDir){
 		//draws the image but with corner to right side 
 		g.drawImage(bi, xDir - 38, yDir, imageW, imageH, null);
+		//System.out.println(posx + " " + posy);
+	}
+	public void drawImageStatic(Graphics g){
+		//draws the image but with corner to right side 
+		g.drawImage(bi, posx - 38, posy, imageW, imageH, null);
 		//System.out.println(posx + " " + posy);
 	}
 	
@@ -54,10 +49,11 @@ public class Enemy{
 		posy = start[1];
 	}
 	
-	public void moveImage(Graphics g) {
+	public boolean moveImage(Graphics g) {
 		//vars
 		int move[] = new int[2];
 		int start[] = new int[2];
+		boolean answer = true;
 		
 		//change position of enemy on path
 		if(pathDistance == 0) {
@@ -81,7 +77,15 @@ public class Enemy{
 			if(pathDistance >= 25) {
 				pathDistance = 0;
 			}
+			
+			answer = true;
 		}
+		//end so reduce life
+		else {
+			answer = false;
+		}
+		
+		return answer;
 	}
 	
 	public int getPathPos() {
