@@ -21,11 +21,8 @@ public class MapLoad extends JPanel{
 	private int[] startPos;
 	private int[] endPos;
 	private ArrayList<Enemy> enemies = new ArrayList<Enemy>();
-	private Enemy enemies2[] = new Enemy[2];
 	private int movement;
-	private int enemiesPrint;
-	private Enemy e1;
-	private Enemy e2;
+	private ArrayList<Tower> towers = new ArrayList<Tower>();
 	private Path[] path;
 	private Enemy[] enemyType;
 	private int live;
@@ -63,6 +60,11 @@ public class MapLoad extends JPanel{
 		if(live > 0) {
 			//show back ground
 			bg.paint(g);
+			
+			//towers
+			for(int v = 0; v < towers.size(); v++) {
+				towers.get(v).drawImage(g);
+			}
 			
 			//start enemies if movement enabled
 			switch(movement) {
@@ -139,6 +141,28 @@ public class MapLoad extends JPanel{
 	public void end() {
 		//stop movement
 		movement = 0;
+	}
+	
+	public void createTower(int posx, int posy) {
+		//var to create the tower types
+		String towerImage[] = {"tower0.png", "tower1.png", "tower2.png", "tower3.png", "tower4.png", "tower5.png"};
+		String bulletImage[] = {"bullet0.png", "bullet1.png", "bullet2.png", "bullet3.png", "bullet4.png", "bullet5.png", };
+		//int bulletWH[][] = {{}, {}, {}, {}, {}, {}};
+		
+		try {
+			//load tower image
+			BufferedImage ti = ImageIO.read(new File("tower0.png"));
+			
+			//load bullet image
+			BufferedImage bi = ImageIO.read(new File("bullet0.png"));
+			
+			//create tower
+			towers.add(new Tower(posx, posy, ti, bi, 25, 25, 2, 2));
+		}
+		catch(Exception E) {
+			System.out.println(E);
+		}
+		
 	}
 	
 	public void loadEnemies() {
@@ -253,6 +277,21 @@ public class MapLoad extends JPanel{
 	
 	public int getRound() {
 		return round;
+	}
+	
+	public String getTp(int xIn, int yIn) {
+		String answer = "";
+		
+		for(int v = 0; v < path.length; v++) {
+			if(path[v].inBounds(xIn, yIn)) {
+				answer = "On Path";
+				break;
+			}else {
+				answer = "x: " + xIn + " y: " + yIn;
+			}
+		}
+		
+		return answer;
 	}
 	
 }

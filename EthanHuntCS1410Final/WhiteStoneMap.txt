@@ -9,9 +9,9 @@ F S S S T E E E D E E E
 D E E E D E E E D E E E
 D E E E L S S S R E E E
 D E E E E E E E E E E E
-D E E E E E E F S S S S
-D E E E E E E D E E E E
-D E E E E E E D E E E E
-D E E E E E E D E E E E
-L S S S S S S R E E E E
+D E E E F S S S S S S S
+D E E E D E E E E E E E
+D E E E D E E E E E E E
+D E E E D E E E E E E E
+L S S S R E E E E E E E
 E E E E E E E E E E E E

@@ -44,6 +44,34 @@ public abstract class Path {
 		return y;
 	}
 	
+	public boolean inBounds(int xIn, int yIn) {
+		boolean answer = false;
+		
+		//var bound
+		int mx = 0;
+		int my = 0;
+		int nx = 0;
+		int ny = 0;
+		
+		//set bounds
+		mx = ((x + 1) * 50);
+		my = ((y + 1) * 50);
+		nx = (x * 50);
+		ny = (y * 50);
+		
+		//check in bounds
+		if((nx <= xIn & xIn <= mx)) {
+			if(ny <= yIn & yIn <= my) {
+				answer = true;
+			}
+			else {
+				answer = false;
+			}
+		}
+		
+		return answer;
+	}
+	
 	public void printPath() {
 		System.out.printf("prex %s, prey %s, x %s, y %s, type %s%n", prex, prey, x, y, type);
 	}
