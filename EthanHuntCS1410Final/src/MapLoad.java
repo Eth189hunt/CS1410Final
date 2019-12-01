@@ -66,6 +66,31 @@ public class MapLoad extends JPanel{
 				towers.get(v).drawImage(g);
 			}
 			
+			//bullets and enemy collision
+			for(int e = 0; e < enemies.size(); e++) {
+				//
+				for(int t = 0; t < towers.size(); t++) {
+					
+					//
+					for(int b = 0; b < towers.get(t).getBullets().size(); b++) {
+						//check each x and y in bullet size
+						System.out.println(towers.get(t).getBullets().size());
+						for(int x = 0; x < towers.get(t).getBullets().get(b).getImageW(); x++) {
+							for(int y = 0; y < towers.get(t).getBullets().get(b).getImageH(); y++) {
+								//increase from bullets current x and y
+								int tempx = x + towers.get(t).getBullets().get(b).getX();
+								int tempy = y + towers.get(t).getBullets().get(b).getY();
+								if(enemies.size() != 0 && enemies.get(e).inBound(tempx, tempy)) {
+									//bye enemy
+									deleteEnemy(e);
+								}
+							}	
+						}
+					}
+					
+				}
+			}
+			
 			//start enemies if movement enabled
 			switch(movement) {
 				case 1:
@@ -84,6 +109,12 @@ public class MapLoad extends JPanel{
 							}
 						}
 					}
+					
+					//have bullets moving
+					for(int v = 0; v < towers.size(); v++) {
+						towers.get(v).bulletMoving(g);
+					}
+					
 				break;
 				case 2:
 					//have enemies paused
@@ -92,12 +123,23 @@ public class MapLoad extends JPanel{
 							enemies.get(v).drawImageStatic(g);
 						}
 					}
+					
+					//have bullets paused
+					for(int v = 0; v < towers.size(); v++) {
+						towers.get(v).bulletStatic(g);
+					}
 				break;
 				default:
 					//not printing enemies
+					
+					//remove bullets
+					for(int v = 0; v  < towers.size(); v++) {
+						towers.get(v).removeBullets();
+					}
 				break;
 				
 			}
+			
 		}
 		//make it disappear
 		else {
@@ -105,7 +147,7 @@ public class MapLoad extends JPanel{
 		}
 		
 		try {
-			Thread.sleep(5);
+			Thread.sleep(35);
 		}catch(Exception e) {
 			System.out.println(e);
 		}
@@ -143,11 +185,23 @@ public class MapLoad extends JPanel{
 		movement = 0;
 	}
 	
+	public void deleteEnemy(int i) {
+		//increase money
+		money+=enemies.get(i).getMoney();
+		
+		//remove enemy
+		enemies.remove(i);
+	}
+	
 	public void createTower(int posx, int posy) {
 		//var to create the tower types
 		String towerImage[] = {"tower0.png", "tower1.png", "tower2.png", "tower3.png", "tower4.png", "tower5.png"};
 		String bulletImage[] = {"bullet0.png", "bullet1.png", "bullet2.png", "bullet3.png", "bullet4.png", "bullet5.png", };
 		//int bulletWH[][] = {{}, {}, {}, {}, {}, {}};
+		
+		//move to x and y to the tile it is in
+		posx = posx - (posx % 50);
+		posy = posy - (posy % 50);
 		
 		try {
 			//load tower image
@@ -157,11 +211,13 @@ public class MapLoad extends JPanel{
 			BufferedImage bi = ImageIO.read(new File("bullet0.png"));
 			
 			//create tower
-			towers.add(new Tower(posx, posy, ti, bi, 25, 25, 2, 2));
+			towers.add(new Tower(posx, posy, ti, posx + 25, posy + 5, bi, 25, 25, 2, 0, 50, 10));
 		}
 		catch(Exception E) {
 			System.out.println(E);
 		}
+		
+		//System.out.println("x: " + posx + "y: " + posy);
 		
 	}
 	

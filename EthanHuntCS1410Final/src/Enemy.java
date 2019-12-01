@@ -38,6 +38,38 @@ public class Enemy extends MovingObject{
 		//System.out.println(posx + " " + posy);
 	}
 	
+	public int getMoney() {
+		return (strength * health);
+	}
+	
+	public boolean inBound(int xIn, int yIn) {
+		boolean answer = false;
+		
+		//vars
+		int mx = 0;
+		int nx = 0;
+		int my = 0;
+		int ny = 0;
+		
+		//set vars for min/max on x and y
+		mx = posx + 38;
+		nx = posx;
+		my = posy + 38;
+		ny = posy;
+		
+		//true if there is a collision
+		if((nx <= xIn & xIn <= mx)) {
+			if(ny <= yIn & yIn <= my) {
+				answer = true;
+			}
+			else {
+				answer = false;
+			}
+		}
+		
+		return answer;
+	}
+	
 	public void startPos() {
 		int start[] = new int[2];
 		

@@ -13,13 +13,16 @@ public class Tower extends StationaryObject {
 	
 	private ArrayList<Bullets> bullets = new ArrayList<Bullets>();
 	private BufferedImage bullImage;
+	private int bullx;
+	private int bully;
 	private int bullW;
 	private int bullH;
 	private int bullxv;
 	private int bullyv;
+	private int bulletDistance;
 	private int cost;
 	
-	public Tower(int posx, int posy, BufferedImage bi, BufferedImage bullImage, int bullW, int bullH, int bullxv, int bullyv) {
+	public Tower(int posx, int posy, BufferedImage bi, int bullx, int bully, BufferedImage bullImage, int bullW, int bullH, int bullxv, int bullyv, int bulletDistance, int cost) {
 		//need to be 50 by 50
 		super(posx, posy, bi, 50, 50);
 		this.bullImage = bullImage;
@@ -27,16 +30,75 @@ public class Tower extends StationaryObject {
 		this.bullH = bullH;
 		this.bullxv = bullxv;
 		this.bullyv = bullyv;
+		this.bullx = bullx;
+		this.bully = bully;
+		this.bulletDistance = bulletDistance;
+		this.cost = cost;
+		
+		//add one bullet so starts bullet move works correctly
+		addBullet();
+		
 	}
 	
 	
 	
 	public void addBullet() {
-		bullets.add(new Bullets(posx, posy, bullImage, bullW, bullH, bullxv, bullyv));
+		bullets.add(new Bullets(bullx, bully, bullImage, bullW, bullH, bullxv, bullyv));
 	}
 	
-	//paint in center
+	public void removeBullets() {
+		//remove all
+		for(int v = 0; v < bullets.size(); v++) {
+			bullets.remove(v);
+		}
+		
+		//add one back
+		addBullet();
+	}
+	
 	public void drawImage(Graphics g){
-		g.drawImage(bi,posx - 25, posy - 25,imageW,imageH,null);
+		g.drawImage(bi,posx, posy,imageW,imageH,null);
+	}
+	
+	public void bulletStatic(Graphics g) {
+		//draw with no movement
+		for(int v = 0; v < bullets.size(); v++) {
+			bullets.get(v).drawImageStatic(g);
+		}
+	}
+	
+	public void bulletMoving(Graphics g) {
+		//draw with movement
+		for(int v = 0; v < bullets.size(); v++) {
+			//draw image with move
+			bullets.get(v).drawImage(g);
+			
+			//delete if out of jpanel
+			if(bullets.get(v).getX() > 600 || bullets.get(v).getY() > 600) {
+				bullets.remove(v);
+			}
+		}
+		
+		//add new one
+		if(bullets.get(bullets.size() - 1).getX() > (bulletDistance) + bullx || bullets.get(bullets.size() - 1).getY() > (bulletDistance) + bully) {
+			addBullet();
+		}
+		
+		//System.out.println(bullets.size());
+		
+	}
+	
+	public ArrayList<Bullets> getBullets(){
+		return bullets;
+	}
+	
+	public void deleteBullet(int i) {
+		bullets.remove(i);
+	}
+	
+	public void checkBounds() {
+		
+		//
+		
 	}
 }
