@@ -8,6 +8,7 @@ Date: 12/9/2019
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 
 import javax.imageio.ImageIO;
@@ -54,7 +55,7 @@ public class MapLoad extends JPanel{
 		
 	
 	public void paint(Graphics g) {
-		super.paint(g);
+		//super.paint(g);
 		
 		//go if lives good
 		if(live > 0) {
@@ -64,31 +65,6 @@ public class MapLoad extends JPanel{
 			//towers
 			for(int v = 0; v < towers.size(); v++) {
 				towers.get(v).drawImage(g);
-			}
-			
-			//bullets and enemy collision
-			for(int e = 0; e < enemies.size(); e++) {
-				//
-				for(int t = 0; t < towers.size(); t++) {
-					
-					//
-					for(int b = 0; b < towers.get(t).getBullets().size(); b++) {
-						//check each x and y in bullet size
-						System.out.println(towers.get(t).getBullets().size());
-						for(int x = 0; x < towers.get(t).getBullets().get(b).getImageW(); x++) {
-							for(int y = 0; y < towers.get(t).getBullets().get(b).getImageH(); y++) {
-								//increase from bullets current x and y
-								int tempx = x + towers.get(t).getBullets().get(b).getX();
-								int tempy = y + towers.get(t).getBullets().get(b).getY();
-								if(enemies.size() != 0 && enemies.get(e).inBound(tempx, tempy)) {
-									//bye enemy
-									deleteEnemy(e);
-								}
-							}	
-						}
-					}
-					
-				}
 			}
 			
 			//start enemies if movement enabled
@@ -115,6 +91,30 @@ public class MapLoad extends JPanel{
 						towers.get(v).bulletMoving(g);
 					}
 					
+					//bullets and enemy collision
+					int tempe = enemies.size();
+					for(int e = 0; e < enemies.size(); e++) {
+						//
+						for(int t = 0; t < towers.size(); t++) {
+							//
+							for(int b = 0; b < towers.get(t).getBullets().size(); b++) {
+								//check each x and y in bullet size
+								for(int x = 0; x < towers.get(t).getBullets().get(b).getImageW(); x++) {
+									for(int y = 0; y < towers.get(t).getBullets().get(b).getImageH(); y++) {
+										//increase from bullets current x and y
+										int tempx = x + towers.get(t).getBullets().get(b).getX();
+										int tempy = y + towers.get(t).getBullets().get(b).getY();
+										if(enemies.size() == tempe && enemies.size() != 0 && enemies.get(e).inBound(tempx, tempy)) {
+											//bye enemy
+											deleteEnemy(e);
+										}
+									}	
+								}
+							}
+							
+						}
+					}
+					
 				break;
 				case 2:
 					//have enemies paused
@@ -139,6 +139,7 @@ public class MapLoad extends JPanel{
 				break;
 				
 			}
+			
 			
 		}
 		//make it disappear
@@ -193,11 +194,19 @@ public class MapLoad extends JPanel{
 		enemies.remove(i);
 	}
 	
-	public void createTower(int posx, int posy) {
+	public boolean createTower(int posx, int posy, String value, String towerImage[], int towerCost[]) {
+		boolean answer = false;
+		
+		int valueI = Integer.parseInt(value);
+		
 		//var to create the tower types
-		String towerImage[] = {"tower0.png", "tower1.png", "tower2.png", "tower3.png", "tower4.png", "tower5.png"};
-		String bulletImage[] = {"bullet0.png", "bullet1.png", "bullet2.png", "bullet3.png", "bullet4.png", "bullet5.png", };
-		//int bulletWH[][] = {{}, {}, {}, {}, {}, {}};
+		String bulletImage[] = {"bullet0.png", "bullet1.png", "bullet2.png", "bullet0.png", "bullet1.png", "bullet2r.png"};
+		
+		//vars for bullets
+		int bulletWH[][] = {{25, 25}, {25, 25}, {50, 50}, {25, 25}, {25, 25}, {50, 50}};
+		int bulletXY[][] = {{25, 5}, {10, 2}, {7, 20}, {0, 5}, {10, 30}, {7, 7}};
+		int moveDir[][] = {{2, 0}, {0, -1}, {-4, -4}, {-2, 0}, {0, 1}, {-4, 4}};
+		int spaceBetween[] = {50, 100, 80, 50, 100, 80};
 		
 		//move to x and y to the tile it is in
 		posx = posx - (posx % 50);
@@ -205,19 +214,30 @@ public class MapLoad extends JPanel{
 		
 		try {
 			//load tower image
-			BufferedImage ti = ImageIO.read(new File("tower0.png"));
+			BufferedImage ti = ImageIO.read(new File(towerImage[valueI]));
 			
 			//load bullet image
-			BufferedImage bi = ImageIO.read(new File("bullet0.png"));
+			BufferedImage bi = ImageIO.read(new File(bulletImage[valueI]));
 			
-			//create tower
-			towers.add(new Tower(posx, posy, ti, posx + 25, posy + 5, bi, 25, 25, 2, 0, 50, 10));
+			//check cost
+			if(money > towerCost[valueI]) {
+				//create tower
+				towers.add(new Tower(posx, posy, ti, (posx + bulletXY[valueI][0]), posy + (bulletXY[valueI][1]), bi, bulletWH[valueI][0], bulletWH[valueI][1], moveDir[valueI][0], moveDir[valueI][1], spaceBetween[valueI]));
+				
+				//good
+				answer = true;
+				
+				//subtract money
+				money-=towerCost[valueI];
+			}
+			
+			
 		}
-		catch(Exception E) {
-			System.out.println(E);
+		catch(IOException E) {
+			System.err.println(E);
 		}
 		
-		//System.out.println("x: " + posx + "y: " + posy);
+		return answer;
 		
 	}
 	
@@ -228,84 +248,22 @@ public class MapLoad extends JPanel{
 			int enemyHealths[] = {1, 2, 3, 4, 5, 6, 7, 10, 12, 16};
 			int enemyStrength[] = {1, 1, 1, 1, 1, 1, 1, 2, 2, 4};
 			
-			//add type 1 enemies
-			for(int x = 0; x < (round * 20); x++) {
-				//load image
-				BufferedImage image = ImageIO.read(new File("enemy1.png"));
-				//add enemy
-				enemies.add(new Enemy(startPos[0],startPos[1], image, enemyHealths[0], enemyStrength[0], path));
-			}
+			//round start creating
+			int roundStart[] = {0, 2, 4, 6, 7, 8, 9, 10, 11, 12};
 			
-			//add type 2 enemies
-			for(int x = 0; x < ((round - 2) * 10); x++) {
-				//load image
-				BufferedImage image = ImageIO.read(new File("enemy2.png"));
-				//add enemy
-				enemies.add(new Enemy(startPos[0],startPos[1], image, enemyHealths[1], enemyStrength[1], path));
-			}
+			//round number created
+			int roundNum[] = { 20, 10, 5, 4, 4, 4, 3, 2, 2, 1};
 			
-			//add type 3 enemies
-			for(int x = 0; x < ((round - 4) * 5); x++) {
-				//load image
-				BufferedImage image = ImageIO.read(new File("enemy3.png"));
-				//add enemy
-				enemies.add(new Enemy(startPos[0],startPos[1], image, enemyHealths[2], enemyStrength[2], path));
-			}
-			
-			//add type 4 enemies
-			for(int x = 0; x < ((round - 6) * 4); x++) {
-				//load image
-				BufferedImage image = ImageIO.read(new File("enemy4.png"));
-				//add enemy
-				enemies.add(new Enemy(startPos[0],startPos[1], image, enemyHealths[3], enemyStrength[3], path));
-			}
-			
-			//add type 5 enemies
-			for(int x = 0; x < ((round - 7) * 4); x++) {
-				//load image
-				BufferedImage image = ImageIO.read(new File("enemy5.png"));
-				//add enemy
-				enemies.add(new Enemy(startPos[0],startPos[1], image, enemyHealths[4], enemyStrength[4], path));
-			}
-			
-			//add type 6 enemies
-			for(int x = 0; x < ((round - 8) * 4); x++) {
-				//load image
-				BufferedImage image = ImageIO.read(new File("enemy6.png"));
-				//add enemy
-				enemies.add(new Enemy(startPos[0],startPos[1], image, enemyHealths[5], enemyStrength[5], path));
-			}
-			
-			//add type 7 enemies
-			for(int x = 0; x < ((round - 9) * 3); x++) {
-				//load image
-				BufferedImage image = ImageIO.read(new File("enemy7.png"));
-				//add enemy
-				enemies.add(new Enemy(startPos[0],startPos[1], image, enemyHealths[6], enemyStrength[6], path));
-			}
-			
-			//add type 8 enemies
-			for(int x = 0; x < ((round - 10) * 2); x++) {
-				//load image
-				BufferedImage image = ImageIO.read(new File("enemy8.png"));
-				//add enemy
-				enemies.add(new Enemy(startPos[0],startPos[1], image, enemyHealths[7], enemyStrength[7], path));
-			}
-			
-			//add type 9 enemies
-			for(int x = 0; x < ((round - 11) * 2); x++) {
-				//load image
-				BufferedImage image = ImageIO.read(new File("enemy9.png"));
-				//add enemy
-				enemies.add(new Enemy(startPos[0],startPos[1], image, enemyHealths[8], enemyStrength[8], path));
-			}
-			
-			//add type 10 enemies
-			for(int x = 0; x < ((round - 12) * 1); x++) {
-				//load image
-				BufferedImage image = ImageIO.read(new File("enemy10.png"));
-				//add enemy
-				enemies.add(new Enemy(startPos[0],startPos[1], image, enemyHealths[9], enemyStrength[9], path));
+			//the ten types
+			for(int i = 0; i < 10; i++) {
+				//add type number depending on round
+				for(int v = 0; v < ((round - roundStart[i]) * roundNum[i]); v++) {
+					//load image
+					BufferedImage image = ImageIO.read(new File("enemy" + (i + 1) + ".png"));
+					
+					//add enemy
+					enemies.add(new Enemy(startPos[0],startPos[1], image, enemyHealths[i], enemyStrength[i], path));
+				}
 			}
 			
 			//set enemy start
@@ -343,7 +301,7 @@ public class MapLoad extends JPanel{
 				answer = "On Path";
 				break;
 			}else {
-				answer = "x: " + xIn + " y: " + yIn;
+				answer = "x: " + (xIn - (xIn % 50)) + " y: " + (yIn - (yIn % 50));
 			}
 		}
 		

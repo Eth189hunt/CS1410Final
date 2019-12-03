@@ -20,9 +20,8 @@ public class Tower extends StationaryObject {
 	private int bullxv;
 	private int bullyv;
 	private int bulletDistance;
-	private int cost;
 	
-	public Tower(int posx, int posy, BufferedImage bi, int bullx, int bully, BufferedImage bullImage, int bullW, int bullH, int bullxv, int bullyv, int bulletDistance, int cost) {
+	public Tower(int posx, int posy, BufferedImage bi, int bullx, int bully, BufferedImage bullImage, int bullW, int bullH, int bullxv, int bullyv, int bulletDistance) {
 		//need to be 50 by 50
 		super(posx, posy, bi, 50, 50);
 		this.bullImage = bullImage;
@@ -33,7 +32,6 @@ public class Tower extends StationaryObject {
 		this.bullx = bullx;
 		this.bully = bully;
 		this.bulletDistance = bulletDistance;
-		this.cost = cost;
 		
 		//add one bullet so starts bullet move works correctly
 		addBullet();
@@ -74,13 +72,13 @@ public class Tower extends StationaryObject {
 			bullets.get(v).drawImage(g);
 			
 			//delete if out of jpanel
-			if(bullets.get(v).getX() > 600 || bullets.get(v).getY() > 600) {
+			if(bullets.get(v).getX() > 600 || bullets.get(v).getY() > 600 || bullets.get(v).getX() < 0 || bullets.get(v).getY() < 0) {
 				bullets.remove(v);
 			}
 		}
 		
 		//add new one
-		if(bullets.get(bullets.size() - 1).getX() > (bulletDistance) + bullx || bullets.get(bullets.size() - 1).getY() > (bulletDistance) + bully) {
+		if(bullets.get(bullets.size() - 1).getX() > (bulletDistance) + bullx || bullets.get(bullets.size() - 1).getY() > (bulletDistance) + bully || bullets.get(bullets.size() - 1).getY() < bully - bulletDistance || bullets.get(bullets.size() - 1).getX() < bullx - bulletDistance) {
 			addBullet();
 		}
 		
@@ -96,9 +94,11 @@ public class Tower extends StationaryObject {
 		bullets.remove(i);
 	}
 	
-	public void checkBounds() {
+	public boolean checkPosition() {
+		boolean answer = false;
 		
-		//
 		
+		
+		return answer;		
 	}
 }

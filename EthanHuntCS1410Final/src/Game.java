@@ -52,27 +52,43 @@ public class Game extends JPanel{
 		towersView.setLayout(null);
 		
 		
-		JButton towerTypes[] = new JButton[types];
+		JPanel towerTypes[] = new JPanel[types];
+		
+		String towerImage[] = {"tower0.png", "tower1.png", "tower2.png", "tower0r.png", "tower1r.png", "tower2r.png"};
+		int towerCost[] = {25, 50, 75, 25, 50, 75};
 		
 		for(int v = 0; v < towerTypes.length / 2; v++) {
 			
-			ImageIcon image = new ImageIcon("tower0.png");
+			ImageIcon image = new ImageIcon(towerImage[v]);
 			Image image2 = image.getImage();
 			Image newImage = image2.getScaledInstance(40, 40,  java.awt.Image.SCALE_SMOOTH);
 			image = new ImageIcon(newImage);
 			
-			towerTypes[v] = new JButton(image);
-			towerTypes[v].setText("1");
-			towerTypes[v].setIconTextGap(-25);
-			towerTypes[v].setIcon(image);
-			towerTypes[v].setBounds(20, (20 + 70 * v), 50, 50);
-			towerTypes[v].setBorder(new LineBorder(Color.DARK_GRAY));
-			towersView.add(towerTypes[v]);
-			towerTypes[v].setLayout(null);
+			JButton tower = new JButton(image);
+			tower.setText(v + "");
+			tower.setFont(new Font("Tahoma", Font.PLAIN, 0));
+			tower.setIconTextGap(-25);
+			tower.setIcon(image);
+			tower.setBounds(20, (20 + 70 * v), 50, 50);
+			tower.setBorder(new LineBorder(Color.DARK_GRAY));
+			tower.setLayout(null);
 			
-			towerTypes[v].addMouseListener(new MouseAdapter() {
+			towerTypes[v] = new JPanel();
+			towerTypes[v].setBounds(20, (20 + 70 * v), 50, 50);
+			towersView.add(towerTypes[v]);
+			towerTypes[v].add(tower);
+			
+			tower.addMouseListener(new MouseAdapter() {
 				public void mouseClicked(MouseEvent event) {
-					map.createTower(xClick, yClick);
+					//work or fail statement
+					if(map.createTower(xClick, yClick, (tower.getText()), towerImage, towerCost)){
+						
+					}else {
+						System.out.println("Not enough money");
+					}
+					
+					//update
+					update();
 				}
 			});
 			
@@ -81,11 +97,35 @@ public class Game extends JPanel{
 		
 		for(int v = 0; v < towerTypes.length / 2; v++) {
 			
-			towerTypes[(v + (towerTypes.length / 2))] = new JButton();
-			towerTypes[(v + (towerTypes.length / 2))].setBounds(90, (20 + 70 * v), 50, 50);
-			towerTypes[(v + (towerTypes.length / 2))].setBorder(new LineBorder(Color.DARK_GRAY));
-			towersView.add(towerTypes[(v + (towerTypes.length / 2))]);
-			towerTypes[(v + (towerTypes.length / 2))].setLayout(null);
+			int tempv = v + (towerTypes.length / 2);
+			
+			ImageIcon image = new ImageIcon(towerImage[tempv]);
+			Image image2 = image.getImage();
+			Image newImage = image2.getScaledInstance(40, 40,  java.awt.Image.SCALE_SMOOTH);
+			image = new ImageIcon(newImage);
+			
+			JButton tower = new JButton(image);
+			tower.setText(tempv + "");
+			tower.setFont(new Font("Tahoma", Font.PLAIN, 0));
+			tower.setIconTextGap(-25);
+			tower.setIcon(image);
+			tower.setBounds(90, (20 + 70 * v), 50, 50);
+			tower.setBorder(new LineBorder(Color.DARK_GRAY));
+			tower.setLayout(null);
+			
+			towerTypes[tempv] = new JPanel();
+			towerTypes[tempv].setBounds(90, (20 + 70 * v), 50, 50);
+			towersView.add(towerTypes[tempv]);
+			towerTypes[tempv].add(tower);
+			
+			tower.addMouseListener(new MouseAdapter() {
+				public void mouseClicked(MouseEvent event) {
+					map.createTower(xClick, yClick, (tower.getText()), towerImage, towerCost);
+					
+					//update
+					update();
+				}
+			});
 			
 			
 		}
@@ -221,10 +261,9 @@ public class Game extends JPanel{
 					start.setText("Pause/End");
 					map.start();
 					
-					//get and set money, live, round
-					moneyL.setText("Money: " + map.getMoney());
-					liveL.setText("Live: " + map.getLive());
-					roundL.setText("Round: " + map.getRound());
+					//update
+					update();
+					
 				}
 				//for pause/end
 				else if(start.getText().equals("Pause/End")) {
@@ -239,20 +278,17 @@ public class Game extends JPanel{
 						map.end();
 					}
 					
-					//get and set money, live, round
-					moneyL.setText("Money: " + map.getMoney());
-					liveL.setText("Live: " + map.getLive());
-					roundL.setText("Round: " + map.getRound());
+					//update
+					update();
+					
 				}
 				//for unpause
 				else if(start.getText().equals("UnPause")) {
 					start.setText("Pause/End");
 					map.unpause();
 					
-					//get and set money, live, round
-					moneyL.setText("Money: " + map.getMoney());
-					liveL.setText("Live: " + map.getLive());
-					roundL.setText("Round: " + map.getRound());
+					//update
+					update();
 				}
 			}
 		});
@@ -262,10 +298,22 @@ public class Game extends JPanel{
 			public void mouseClicked(MouseEvent event) {
 				xClick = event.getX();
 				yClick = event.getY();
-				posStat.setText("<html><p>Tower placement: \n" + map.getTp(xClick, yClick) + "</p></html>");
+				posStat.setText("<html><p>Tower placement: \n" + (map.getTp(xClick, yClick)) + "</p></html>");
 				//System.out.println(xClick + " " + yClick);
+				
+				//update
+				update();
 			}
 		});
+		
+		
+	}
+	
+	public void update() {
+		//get and set money, live, round
+		moneyL.setText("Money: " + map.getMoney());
+		liveL.setText("Live: " + map.getLive());
+		roundL.setText("Round: " + map.getRound());
 		
 		
 	}
