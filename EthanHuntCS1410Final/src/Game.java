@@ -33,9 +33,12 @@ public class Game extends JPanel{
 	private JLabel liveL;
 	private JLabel roundL;
 	private JLabel posStat;
+	private UpgradesGen upgrades;
 	private MapLoad map;
 	private int xClick;
 	private int yClick;
+	private boolean path1Butt;
+	private boolean path2Butt;
 	
 	public Game(int mode, int types, String file) {
 		setLayout(null);
@@ -59,9 +62,14 @@ public class Game extends JPanel{
 		
 		for(int v = 0; v < towerTypes.length / 2; v++) {
 			
+			towerTypes[v] = new JPanel();
+			towerTypes[v].setBounds(20, (20 + 70 * v), 50, 50);
+			towersView.add(towerTypes[v]);
+			towerTypes[v].setLayout(null);
+			
 			ImageIcon image = new ImageIcon(towerImage[v]);
 			Image image2 = image.getImage();
-			Image newImage = image2.getScaledInstance(40, 40,  java.awt.Image.SCALE_SMOOTH);
+			Image newImage = image2.getScaledInstance(30, 30,  java.awt.Image.SCALE_SMOOTH);
 			image = new ImageIcon(newImage);
 			
 			JButton tower = new JButton(image);
@@ -69,23 +77,21 @@ public class Game extends JPanel{
 			tower.setFont(new Font("Tahoma", Font.PLAIN, 0));
 			tower.setIconTextGap(-25);
 			tower.setIcon(image);
-			tower.setBounds(20, (20 + 70 * v), 50, 50);
+			tower.setBounds(10, 0, 30, 30);
 			tower.setBorder(new LineBorder(Color.DARK_GRAY));
+			towerTypes[v].add(tower);
 			tower.setLayout(null);
 			
-			towerTypes[v] = new JPanel();
-			towerTypes[v].setBounds(20, (20 + 70 * v), 50, 50);
-			towersView.add(towerTypes[v]);
-			towerTypes[v].add(tower);
+			JLabel cost = new JLabel();
+			cost.setBounds(0, 30, 50, 20);
+			cost.setText("$" + towerCost[v]);
+			cost.setHorizontalAlignment(SwingConstants.CENTER);
+			towerTypes[v].add(cost);
 			
 			tower.addMouseListener(new MouseAdapter() {
 				public void mouseClicked(MouseEvent event) {
 					//work or fail statement
-					if(map.createTower(xClick, yClick, (tower.getText()), towerImage, towerCost)){
-						
-					}else {
-						System.out.println("Not enough money");
-					}
+					map.createTower(xClick, yClick, (tower.getText()), towerImage, towerCost);
 					
 					//update
 					update();
@@ -99,9 +105,14 @@ public class Game extends JPanel{
 			
 			int tempv = v + (towerTypes.length / 2);
 			
+			towerTypes[tempv] = new JPanel();
+			towerTypes[tempv].setBounds(90, (20 + 70 * v), 50, 50);
+			towersView.add(towerTypes[tempv]);
+			towerTypes[tempv].setLayout(null);
+			
 			ImageIcon image = new ImageIcon(towerImage[tempv]);
 			Image image2 = image.getImage();
-			Image newImage = image2.getScaledInstance(40, 40,  java.awt.Image.SCALE_SMOOTH);
+			Image newImage = image2.getScaledInstance(30, 30,  java.awt.Image.SCALE_SMOOTH);
 			image = new ImageIcon(newImage);
 			
 			JButton tower = new JButton(image);
@@ -109,14 +120,16 @@ public class Game extends JPanel{
 			tower.setFont(new Font("Tahoma", Font.PLAIN, 0));
 			tower.setIconTextGap(-25);
 			tower.setIcon(image);
-			tower.setBounds(90, (20 + 70 * v), 50, 50);
+			tower.setBounds(10, 0, 30, 30);
 			tower.setBorder(new LineBorder(Color.DARK_GRAY));
+			towerTypes[tempv].add(tower);
 			tower.setLayout(null);
 			
-			towerTypes[tempv] = new JPanel();
-			towerTypes[tempv].setBounds(90, (20 + 70 * v), 50, 50);
-			towersView.add(towerTypes[tempv]);
-			towerTypes[tempv].add(tower);
+			JLabel cost = new JLabel();
+			cost.setBounds(0, 30, 50, 20);
+			cost.setText("$" + towerCost[tempv]);
+			cost.setHorizontalAlignment(SwingConstants.CENTER);
+			towerTypes[tempv].add(cost);
 			
 			tower.addMouseListener(new MouseAdapter() {
 				public void mouseClicked(MouseEvent event) {
@@ -129,24 +142,6 @@ public class Game extends JPanel{
 			
 			
 		}
-		
-		/*JPanel panel_2 = new JPanel();
-		panel_2.setBounds(20, 20, 50, 50);
-		towersView.add(panel_2);
-		
-		JPanel panel_3 = new JPanel();
-		panel_3.setBounds(90, 20, 50, 50);
-		towersView.add(panel_3);
-		
-		JPanel panel_1 = new JPanel();
-		panel_1.setBounds(20, 90, 50, 50);
-		towersView.add(panel_1);
-		
-		JPanel panel_4 = new JPanel();
-		panel_4.setBounds(90, 90, 50, 50);
-		towersView.add(panel_4);*/
-		
-		//
 		
 		JScrollPane towersMenu = new JScrollPane(towersView);
 		towersMenu.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
@@ -175,54 +170,17 @@ public class Game extends JPanel{
 		over.setBounds(400, 260, 200, 40);
 		add(over);*/
 		
-		Upgrades upgrades = new Upgrades();
+		upgrades = new UpgradesGen();
 		upgrades.setBounds(10, 410, 180, 180);
 		upgrades.setBorder(new LineBorder(Color.DARK_GRAY));
-		controls.add(upgrades);
 		upgrades.setLayout(null);
+		controls.add(upgrades);
 		
-		/*JPanel panel = new JPanel();
-		panel.setBounds(10, 410, 180, 180);
-		controls.add(panel);
-		panel.setLayout(null);
-		
-		JPanel panel_5 = new JPanel();
-		panel_5.setBorder(new LineBorder(Color.DARK_GRAY));
-		panel_5.setBounds(10, 20, 160, 60);
-		panel.add(panel_5);
-		panel_5.setLayout(null);
-		
-		JLabel upgradeName = new JLabel("New label");
-		upgradeName.setBounds(1, 0, 158, 20);
-		panel_5.add(upgradeName);
-		
-		JLabel description = new JLabel("New label");
-		description.setBounds(1, 20, 158, 20);
-		panel_5.add(description);
-		
-		JLabel cost = new JLabel("lnew");
-		cost.setHorizontalAlignment(SwingConstants.TRAILING);
-		cost.setBounds(58, 40, 100, 20);
-		panel_5.add(cost);
-		
-		JPanel panel_6 = new JPanel();
-		panel_6.setBorder(new LineBorder(Color.DARK_GRAY));
-		panel_6.setLayout(null);
-		panel_6.setBounds(10, 100, 160, 60);
-		panel.add(panel_6);
-		
-		JLabel label = new JLabel("New label");
-		label.setBounds(1, 0, 158, 20);
-		panel_6.add(label);
-		
-		JLabel label_1 = new JLabel("New label");
-		label_1.setBounds(1, 20, 158, 20);
-		panel_6.add(label_1);
-		
-		JLabel label_2 = new JLabel("lnew");
-		label_2.setHorizontalAlignment(SwingConstants.TRAILING);
-		label_2.setBounds(58, 40, 100, 20);
-		panel_6.add(label_2);*/
+		//path buttons disable
+		path1Butt = false;
+		path2Butt = false;
+		upgrades.getPath1().setEnabled(false);
+		upgrades.getPath2().setEnabled(false);
 		
 		map = new MapLoad(mode, file);
 		map.setBounds(200, 0, 600, 600);
@@ -296,13 +254,72 @@ public class Game extends JPanel{
 		//get x and y for creation of tower
 		map.addMouseListener(new MouseAdapter() {
 			public void mouseClicked(MouseEvent event) {
+				//get x and y for click
 				xClick = event.getX();
 				yClick = event.getY();
+				
+				//check that tower placement works
 				posStat.setText("<html><p>Tower placement: \n" + (map.getTp(xClick, yClick)) + "</p></html>");
-				//System.out.println(xClick + " " + yClick);
+				
+				//get upgrades
+				if(map.getTower((xClick - (xClick % 50)), (yClick - (yClick % 50))) != null){
+					//update upgrades
+					upgrades.textUp(map.getTower((xClick - (xClick % 50)), (yClick - (yClick % 50))).getUpgrades());
+					
+					//enable click
+					path1Butt = true;
+					path2Butt = true;
+					
+					//look like can't click
+					upgrades.getPath1().setEnabled(true);
+					upgrades.getPath2().setEnabled(true);
+				}
+				//blank upgrades
+				else {
+					//null text
+					upgrades.textNull();
+					
+					//can't click
+					path1Butt = false;
+					path2Butt = false;
+					
+					//look like can't click
+					upgrades.getPath1().setEnabled(false);
+					upgrades.getPath2().setEnabled(false);
+				}
 				
 				//update
 				update();
+			}
+		});
+		
+		//button for upgrades path1
+		upgrades.getPath1().addMouseListener(new MouseAdapter() {
+			public void mouseClicked(MouseEvent event) {
+				//method for mouseClick
+				path1Click(event);
+			}
+		});
+		
+		upgrades.getDesc1().addMouseListener(new MouseAdapter() {
+			public void mouseClicked(MouseEvent event) {
+				//method for mouseClick
+				path1Click(event);
+			}
+		});
+		
+		//button for upgrades path2
+		upgrades.getPath2().addMouseListener(new MouseAdapter() {
+			public void mouseClicked(MouseEvent event) {
+				//method for mouseClick
+				path2Click(event);
+			}
+		});
+		
+		upgrades.getDesc2().addMouseListener(new MouseAdapter() {
+			public void mouseClicked(MouseEvent event) {
+				//method for mouseClick
+				path2Click(event);
 			}
 		});
 		
@@ -314,8 +331,40 @@ public class Game extends JPanel{
 		moneyL.setText("Money: " + map.getMoney());
 		liveL.setText("Live: " + map.getLive());
 		roundL.setText("Round: " + map.getRound());
-		
-		
+	}
+	
+	public void path1Click(MouseEvent event) {
+		if(path1Butt) {
+			if(map.getTower((xClick - (xClick % 50)), (yClick - (yClick % 50))) != null){
+				//change upgrades
+				int tSlot = map.getTowerSlot((xClick - (xClick % 50)), (yClick - (yClick % 50)));
+				int slot = 0;
+				map.pathClick(tSlot, slot);
+				
+				//update upgrades
+				upgrades.textUp(map.getTower((xClick - (xClick % 50)), (yClick - (yClick % 50))).getUpgrades());
+				
+				//update
+				update();
+			}
+		}
+	}
+	
+	public void path2Click(MouseEvent event) {
+		if(path2Butt) {
+			if(map.getTower((xClick - (xClick % 50)), (yClick - (yClick % 50))) != null){
+				//change upgrades
+				int tSlot = map.getTowerSlot((xClick - (xClick % 50)), (yClick - (yClick % 50)));
+				int slot = 1;
+				map.pathClick(tSlot, slot);
+				
+				//update upgrades
+				upgrades.textUp(map.getTower((xClick - (xClick % 50)), (yClick - (yClick % 50))).getUpgrades());
+				
+				//update
+				update();
+			}
+		}
 	}
 	
 	

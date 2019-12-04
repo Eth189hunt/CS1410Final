@@ -74,6 +74,8 @@ public class MapGen extends JPanel{
 				}
 			}
 			
+			mapFile.close();
+			
 		}
 		catch(FileNotFoundException e) {
 			System.out.println("The file " + file + " couldn't be found");

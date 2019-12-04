@@ -5,6 +5,7 @@ Assignment: Final
 Date: 12/9/2019
 */
 
+import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -14,6 +15,7 @@ import java.util.ArrayList;
 import javax.imageio.ImageIO;
 import javax.swing.JButton;
 import javax.swing.JPanel;
+import javax.swing.border.LineBorder;
 @SuppressWarnings("serial")
 
 public class MapLoad extends JPanel{
@@ -194,8 +196,7 @@ public class MapLoad extends JPanel{
 		enemies.remove(i);
 	}
 	
-	public boolean createTower(int posx, int posy, String value, String towerImage[], int towerCost[]) {
-		boolean answer = false;
+	public void createTower(int posx, int posy, String value, String towerImage[], int towerCost[]) {
 		
 		int valueI = Integer.parseInt(value);
 		
@@ -204,40 +205,127 @@ public class MapLoad extends JPanel{
 		
 		//vars for bullets
 		int bulletWH[][] = {{25, 25}, {25, 25}, {50, 50}, {25, 25}, {25, 25}, {50, 50}};
-		int bulletXY[][] = {{25, 5}, {10, 2}, {7, 20}, {0, 5}, {10, 30}, {7, 7}};
+		int bulletXY[][] = {{25, 5}, {14, 2}, {7, 20}, {0, 5}, {14, 30}, {7, 7}};
 		int moveDir[][] = {{2, 0}, {0, -1}, {-4, -4}, {-2, 0}, {0, 1}, {-4, 4}};
 		int spaceBetween[] = {50, 100, 80, 50, 100, 80};
+		
+		//var for upgrade
+		Upgrade towerUpgrades[] = new Upgrade[4];
+		towerUpgrades[0] = new Distance("hi", "increase distance", 20, 10);
+		towerUpgrades[1] = new Distance("hi2", "decrease distance", 20, -10);
+		towerUpgrades[2] = new Velocity("hi3", "increase v", 20, 1, 0);
+		towerUpgrades[3] = new Velocity("hi4", "decrease v", 20, -1, 0);
+		
 		
 		//move to x and y to the tile it is in
 		posx = posx - (posx % 50);
 		posy = posy - (posy % 50);
 		
-		try {
-			//load tower image
-			BufferedImage ti = ImageIO.read(new File(towerImage[valueI]));
-			
-			//load bullet image
-			BufferedImage bi = ImageIO.read(new File(bulletImage[valueI]));
-			
-			//check cost
-			if(money > towerCost[valueI]) {
-				//create tower
-				towers.add(new Tower(posx, posy, ti, (posx + bulletXY[valueI][0]), posy + (bulletXY[valueI][1]), bi, bulletWH[valueI][0], bulletWH[valueI][1], moveDir[valueI][0], moveDir[valueI][1], spaceBetween[valueI]));
+		//check that not already one there
+		if(checkTower(posx, posy)) {
+			try {
+				//load tower image
+				BufferedImage ti = ImageIO.read(new File(towerImage[valueI]));
 				
-				//good
-				answer = true;
+				//load bullet image
+				BufferedImage bi = ImageIO.read(new File(bulletImage[valueI]));
 				
-				//subtract money
-				money-=towerCost[valueI];
+				//check cost
+				if(money >= towerCost[valueI]) {
+					//create tower
+					towers.add(new Tower(posx, posy, ti, (posx + bulletXY[valueI][0]), posy + (bulletXY[valueI][1]), bi, bulletWH[valueI][0], bulletWH[valueI][1], moveDir[valueI][0], moveDir[valueI][1], spaceBetween[valueI], towerUpgrades));
+					
+					//upgrades for tower
+					
+					//subtract money
+					money-=towerCost[valueI];
+				}else {
+					//error not enought money
+					System.out.println("Not enough money");
+				}
+				
+				
 			}
-			
-			
+			catch(IOException E) {
+				System.err.println(E);
+			}
+		}else {
+			System.out.println("Already a tower there");
 		}
-		catch(IOException E) {
-			System.err.println(E);
+		
+	}
+	
+	public boolean checkTower(int xIn, int yIn) {
+		boolean answer = true;
+		
+		//check that 
+		for(int i = 0; i < towers.size(); i++) {
+			//check if new x and y match this tower x and y
+			if(xIn == towers.get(i).getX() && yIn == towers.get(i).getY()) {
+				//bad to place
+				answer = false;
+				
+				break;
+			}
 		}
 		
 		return answer;
+	}
+	
+	public Tower getTower(int xIn, int yIn) {
+		for(int i = 0; i < towers.size(); i++) {
+			//check for tower at x and y
+			if(xIn == towers.get(i).getX() && yIn == towers.get(i).getY()) {
+				//return tower
+				return towers.get(i);
+			}
+		}
+		return null;
+	}
+	
+	public int getTowerSlot(int xIn, int yIn) {
+		for(int i = 0; i < towers.size(); i++) {
+			//check for tower at x and y
+			if(xIn == towers.get(i).getX() && yIn == towers.get(i).getY()) {
+				//return tower
+				return i;
+			}
+		}
+		return 0;
+	}
+	
+	public void pathClick(int tSlot, int slot) {
+		//new current position
+		int newCurrent = (towers.get(tSlot).getCurrentUp(slot) + 2);
+		
+		//check that not blank
+		if(towers.get(tSlot).checkUpgrade(slot)) {
+			//upgrade is done
+		}
+		//normal upgrade
+		else {
+			//check money
+			if(money >= towers.get(tSlot).getUpgradeCost(slot)) {
+				//decrease money
+				money-=towers.get(tSlot).getUpgradeCost(slot);
+				
+				Upgrade up = towers.get(tSlot).getUpgrades()[slot];
+				
+				//apply upgrade
+				up.change(towers.get(tSlot));
+				
+				//check that newCurrent is not above upgrades
+				if(newCurrent < towers.get(tSlot).getUpgradeSize()) {
+					//upgrade to a new path
+					towers.get(tSlot).setCurrentUp(slot, newCurrent);
+				}else {
+					//upgrade to null
+					towers.get(tSlot).setUpgradeBlank(slot);
+				}
+			}else {
+				System.out.println("Not enough money for upgrade");
+			}
+		}
 		
 	}
 	

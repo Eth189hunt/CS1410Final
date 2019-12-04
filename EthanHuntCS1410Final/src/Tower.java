@@ -20,8 +20,11 @@ public class Tower extends StationaryObject {
 	private int bullxv;
 	private int bullyv;
 	private int bulletDistance;
+	private Upgrade upgrade[];
+	private int currentUp[];
+	private int strength;
 	
-	public Tower(int posx, int posy, BufferedImage bi, int bullx, int bully, BufferedImage bullImage, int bullW, int bullH, int bullxv, int bullyv, int bulletDistance) {
+	public Tower(int posx, int posy, BufferedImage bi, int bullx, int bully, BufferedImage bullImage, int bullW, int bullH, int bullxv, int bullyv, int bulletDistance, Upgrade upgrade[]) {
 		//need to be 50 by 50
 		super(posx, posy, bi, 50, 50);
 		this.bullImage = bullImage;
@@ -36,9 +39,15 @@ public class Tower extends StationaryObject {
 		//add one bullet so starts bullet move works correctly
 		addBullet();
 		
+		
+		//set upgrades
+		this.upgrade = upgrade;
+		
+		//default upgrades
+		currentUp = new int[2];
+		currentUp[0] = 0;
+		currentUp[1] = 1;
 	}
-	
-	
 	
 	public void addBullet() {
 		bullets.add(new Bullets(bullx, bully, bullImage, bullW, bullH, bullxv, bullyv));
@@ -90,15 +99,73 @@ public class Tower extends StationaryObject {
 		return bullets;
 	}
 	
+	public Upgrade[] getUpgrades() {
+		Upgrade[] answer = new Upgrade[2];
+		
+		//get current upgrades
+		answer[0] = upgrade[currentUp[0]];
+		answer[1] = upgrade[currentUp[1]];
+		
+		return answer;
+	}
+	
+	public int getUpgradeSize() {
+		return upgrade.length;
+	}
+	
+	public int getUpgradeCost(int slot) {
+		return upgrade[currentUp[slot]].getCost();
+	}
+	
+	public void setCurrentUp(int slot, int upgradeNum) {
+		currentUp[slot] = upgradeNum;
+	}
+	
+	public int getCurrentUp(int slot) {
+		return currentUp[slot];
+	}
+	
+	public void setUpgradeBlank(int slot) {
+		upgrade[currentUp[slot]] = new Blank();
+	}
+	
+	//check if upgrade is blank
+	public boolean checkUpgrade(int slot) {
+		boolean answer = false;
+		
+		//check if upgrade blank
+		if(upgrade[currentUp[slot]] instanceof Blank) {
+			answer = true;
+		}
+		
+		return answer;
+	}
+	
+	
 	public void deleteBullet(int i) {
 		bullets.remove(i);
 	}
 	
-	public boolean checkPosition() {
-		boolean answer = false;
-		
-		
-		
-		return answer;		
+	public int getX() {
+		return posx;
 	}
+	
+	public int getY() {
+		return posy;
+	}
+	
+	public void addDistance(int distanceChange) {
+		bulletDistance+=distanceChange;
+	}
+	
+	public void addbulletSpeed(int xIncrease, int yIncrease) {
+		//new bullet velocity
+		bullxv += xIncrease;
+		bullyv += yIncrease;
+	}
+	
+	public void addStrength(int strength) {
+		this.strength += strength;
+	}
+	
 }

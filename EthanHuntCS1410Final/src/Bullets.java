@@ -30,11 +30,10 @@ public class Bullets extends MovingObject {
 		return imageW;
 	}
 	
-	//x and y in image
-	public boolean bounds() {
-		boolean answer = false;
-		
-		return answer;
+	//change any vx and vy
+	public void setV(int vx, int vy) {
+		this.vx = vx;
+		this.vy = vy;
 	}
 
 }
