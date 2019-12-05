@@ -83,12 +83,14 @@ public class MapGen extends JPanel{
 	}
 	
 	public void addPictures() {
+		//add picture for background
 		for (int y = 0; y < row; y++){
 			for (int x = 0; x < col; x++){
 				addPicture(x, y);
 			}
 		}
 		
+		//add path
 		for(int y = 0; y < rowPath; y++) {
 			for(int x = 0; x < colPath; x++) {
 				addPath(x, y, pathFiles[x][y]);
@@ -97,6 +99,7 @@ public class MapGen extends JPanel{
 	}
 	
 	public void addPicture(int x, int y){
+		//check if in row and col
 		if (x < 0 || x >= col){
 			System.err.println("There is no col " + x);
 		}
@@ -113,6 +116,7 @@ public class MapGen extends JPanel{
 	}
 	
 	public void addPath(int x, int y, String image) {
+		//check if in row and col
 		if (x < 0 || x >= colPath){
 			System.err.println("There is no colPath " + x);
 		}
@@ -129,12 +133,14 @@ public class MapGen extends JPanel{
 	}
 	
 	public void drawImage(Graphics g){
+		//draw the backgrounds
 		for (int y = 0; y < row; y++){
 			for (int x = 0; x < col; x++){
 				g.drawImage(bgImgs[x][y], x*tileSize, y*tileSize, tileSize, tileSize, null);
 			}
 		}
 		
+		//draw the paths
 		for (int y = 0; y < rowPath; y++){
 			for (int x = 0; x < colPath; x++){
 				g.drawImage(pathImgs[x][y], x*pathSize, y*pathSize, pathSize, pathSize, null);

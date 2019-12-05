@@ -20,6 +20,7 @@ public class Driver extends JFrame{
 
 	public static void main(String[] args) {
 		
+		//create window size and show
 		Driver window = new Driver();
 		window.setSize(816,640);
 		window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -39,8 +40,11 @@ public class Driver extends JFrame{
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				System.out.println("easy");
+				//menu goes away
 				m.setVisible(false);
-				MapSelection mapSel = new MapSelection(10, 1);
+				
+				//create map selection
+				MapSelection mapSel = new MapSelection(2, 1);
 				getContentPane().add(mapSel);
 			}
 		});
@@ -50,8 +54,11 @@ public class Driver extends JFrame{
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				System.out.println("hard");
+				//menu goes away
 				m.setVisible(false);
-				MapSelection mapSel = new MapSelection(10, 2);
+				
+				//create map selection
+				MapSelection mapSel = new MapSelection(2, 2);
 				getContentPane().add(mapSel);
 			}
 		});

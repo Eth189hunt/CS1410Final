@@ -10,16 +10,14 @@ Date: 12/9/2019
 
 public class Enemy extends MovingObject{
 	
-	private int health;
 	private int strength;
 	private int pathPos;
 	private int pathDistance;
 	private int moveSpeed;
 	private Path[] path;
 	
-	public Enemy(int posx, int posy, BufferedImage bi, int health, int strength, Path[] path) {
+	public Enemy(int posx, int posy, BufferedImage bi, int strength, Path[] path) {
 		super(posx, posy, bi, 38, 38, 2, 2);
-		this.health = health;
 		this.strength = strength;
 		this.pathPos = -1;
 		this.pathDistance = 0;
@@ -39,27 +37,25 @@ public class Enemy extends MovingObject{
 	}
 	
 	public int getMoney() {
-		return (strength * health);
+		return (strength * 4);
+	}
+	
+	public int getStrength() {
+		return strength;
 	}
 	
 	public boolean inBound(int xIn, int yIn) {
 		boolean answer = false;
 		
-		//vars
-		int mx = 0;
-		int nx = 0;
-		int my = 0;
-		int ny = 0;
-		
 		//set vars for min/max on x and y
-		mx = posx + 38;
-		nx = posx;
-		my = posy + 38;
-		ny = posy;
+		int nx = posx;
+		int mx = posx + 38;
+		int ny = posy;
+		int my = posy + 38;
 		
 		//true if there is a collision
-		if((nx <= xIn & xIn <= mx)) {
-			if(ny <= yIn & yIn <= my) {
+		if((nx <= xIn && xIn <= mx)) {
+			if(ny <= yIn && yIn <= my) {
 				answer = true;
 			}
 			else {

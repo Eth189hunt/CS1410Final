@@ -24,7 +24,7 @@ public class Tower extends StationaryObject {
 	private int currentUp[];
 	private int strength;
 	
-	public Tower(int posx, int posy, BufferedImage bi, int bullx, int bully, BufferedImage bullImage, int bullW, int bullH, int bullxv, int bullyv, int bulletDistance, Upgrade upgrade[]) {
+	public Tower(int posx, int posy, BufferedImage bi, int bullx, int bully, BufferedImage bullImage, int bullW, int bullH, int bullxv, int bullyv, int bulletDistance, int strength, Upgrade upgrade[]) {
 		//need to be 50 by 50
 		super(posx, posy, bi, 50, 50);
 		this.bullImage = bullImage;
@@ -35,6 +35,7 @@ public class Tower extends StationaryObject {
 		this.bullx = bullx;
 		this.bully = bully;
 		this.bulletDistance = bulletDistance;
+		this.strength = strength;
 		
 		//add one bullet so starts bullet move works correctly
 		addBullet();
@@ -86,17 +87,30 @@ public class Tower extends StationaryObject {
 			}
 		}
 		
-		//add new one
-		if(bullets.get(bullets.size() - 1).getX() > (bulletDistance) + bullx || bullets.get(bullets.size() - 1).getY() > (bulletDistance) + bully || bullets.get(bullets.size() - 1).getY() < bully - bulletDistance || bullets.get(bullets.size() - 1).getX() < bullx - bulletDistance) {
-			addBullet();
+		if(bullets.size() - 1 > -1) {
+			//add new one
+			if(bullets.get(bullets.size() - 1).getX() > (bulletDistance) + bullx || bullets.get(bullets.size() - 1).getY() > (bulletDistance) + bully || bullets.get(bullets.size() - 1).getY() < bully - bulletDistance || bullets.get(bullets.size() - 1).getX() < bullx - bulletDistance) {
+				addBullet();
+			}
+			
+		}else {
+			if(bullets.size() <= 0) {
+				addBullet();
+			}
 		}
-		
-		//System.out.println(bullets.size());
 		
 	}
 	
 	public ArrayList<Bullets> getBullets(){
 		return bullets;
+	}
+	
+	public int getBulletX(int i) {
+		return bullets.get(i).getX();
+	}
+	
+	public int getBulletY(int i) {
+		return bullets.get(i).getY();
 	}
 	
 	public Upgrade[] getUpgrades() {
@@ -166,6 +180,10 @@ public class Tower extends StationaryObject {
 	
 	public void addStrength(int strength) {
 		this.strength += strength;
+	}
+	
+	public int getStrength() {
+		return strength;
 	}
 	
 }

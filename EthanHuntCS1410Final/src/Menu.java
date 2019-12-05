@@ -22,12 +22,12 @@ public class Menu extends JPanel{
 		setLayout(null);
 		
 		//game title
-		JLabel lblTowerDefenseGame = new JLabel("Tower Defense Game");
-		lblTowerDefenseGame.setForeground(Color.BLACK);
-		lblTowerDefenseGame.setHorizontalAlignment(SwingConstants.CENTER);
-		lblTowerDefenseGame.setFont(new Font("Tahoma", Font.PLAIN, 18));
-		lblTowerDefenseGame.setBounds(300, 0, 200, 40);
-		add(lblTowerDefenseGame);
+		JLabel towerDefenseGame = new JLabel("Tower Defense Game");
+		towerDefenseGame.setForeground(Color.BLACK);
+		towerDefenseGame.setHorizontalAlignment(SwingConstants.CENTER);
+		towerDefenseGame.setFont(new Font("Tahoma", Font.PLAIN, 18));
+		towerDefenseGame.setBounds(300, 0, 200, 40);
+		add(towerDefenseGame);
 		
 		//by line part 1
 		JLabel title = new JLabel("CS 1410 Final Project");
@@ -43,7 +43,7 @@ public class Menu extends JPanel{
 		byLine.setBounds(320, 560, 160, 40);
 		add(byLine);
 		
-		//buttons
+		//buttons for modes
 		easy = new JButton("Easymode");
 		easy.setFont(new Font("Tahoma", Font.PLAIN, 15));
 		easy.setBounds(166, 250, 150, 40);

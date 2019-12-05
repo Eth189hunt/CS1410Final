@@ -29,11 +29,9 @@ public class MovingObject extends StationaryObject
 	//renders our object to the screen
 	public void drawImage(Graphics g)
 	{
-		//because we added the bullet functions what should go here?
-		//I intentionally left something out here for you to figure out
+		//increase position with vx and vy
 		g.drawImage(bi, posx+=vx, posy+=vy, imageW, imageH, null);
 		
-	
 	}
 	
 	public int getX() {

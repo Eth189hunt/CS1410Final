@@ -28,20 +28,23 @@ public class UpgradesGen extends JPanel{
 	
 	
 	public UpgradesGen(){
-		
+		//make sure absolute
 		setLayout(null);
 		
+		//top path upgrade button
 		path1 = new JButton();
 		path1.setBounds(10, 20, 160, 60);
 		path1.setBorder(new LineBorder(Color.DARK_GRAY));
 		path1.setLayout(null);
 		add(path1);
 		
+		//top path upgrade name
 		nameL1 = new JLabel();
 		nameL1.setFont(new Font("Tahoma", Font.PLAIN, 10));
 		nameL1.setBounds(5, 1, 155, 10);
 		path1.add(nameL1);
 		
+		//top path upgrade desc
 		descL1 = new JTextArea();
 		descL1.setBounds(1, 10, 160, 40);
 		descL1.setWrapStyleWord(true);
@@ -51,24 +54,27 @@ public class UpgradesGen extends JPanel{
 		descL1.setFocusable(false);
 		path1.add(descL1);
 		
+		//top path upgrade cost
 		costL1 = new JLabel();
 		costL1.setFont(new Font("Tahoma", Font.PLAIN, 10));
 		costL1.setHorizontalAlignment(SwingConstants.RIGHT);
 		costL1.setBounds(0, 49, 155, 10);
 		path1.add(costL1);
 		
-		
+		//bottom path upgrade button
 		path2 = new JButton();
 		path2.setBounds(10, 100, 160, 60);
 		path2.setBorder(new LineBorder(Color.DARK_GRAY));
 		path2.setLayout(null);
 		add(path2);
 		
+		//bottom path upgrade name
 		nameL2 = new JLabel();
 		nameL2.setFont(new Font("Tahoma", Font.PLAIN, 10));
 		nameL2.setBounds(5, 1, 155, 10);
 		path2.add(nameL2);
 		
+		//bottom path upgrade desc
 		descL2 = new JTextArea();
 		descL2.setBounds(1, 10, 160, 40);
 		descL2.setWrapStyleWord(true);
@@ -78,6 +84,7 @@ public class UpgradesGen extends JPanel{
 		descL2.setFocusable(false);
 		path2.add(descL2);
 		
+		//bottom path upgrade cost
 		costL2 = new JLabel();
 		costL2.setFont(new Font("Tahoma", Font.PLAIN, 10));
 		costL2.setHorizontalAlignment(SwingConstants.RIGHT);
@@ -87,6 +94,7 @@ public class UpgradesGen extends JPanel{
 		
 	}
 	
+	//to set info for tower current upgrades
 	public void textUp(Upgrade[] upInfo) {
 		nameL1.setText(upInfo[0].getName());
 		descL1.setText(upInfo[0].getDesc());
@@ -96,6 +104,7 @@ public class UpgradesGen extends JPanel{
 		costL2.setText("$" + upInfo[1].getCost());
 	}
 	
+	//for blank once no more upgrades
 	public void textNull() {
 		//no text
 		nameL1.setText("");

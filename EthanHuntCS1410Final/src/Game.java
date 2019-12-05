@@ -43,35 +43,43 @@ public class Game extends JPanel{
 	public Game(int mode, int types, String file) {
 		setLayout(null);
 		
+		//control panel for none painted information
 		JPanel controls = new JPanel();
 		controls.setBorder(new LineBorder(Color.RED, 5));
 		controls.setBounds(0, 0, 200, 600);
 		add(controls);
 		controls.setLayout(null);
 		
+		//panel for scroll with towers
 		JPanel towersView = new JPanel();
 		towersView.setBounds(0,0,200,(20 + 70 * (types / 2) + 1));
 		towersView.setPreferredSize(new Dimension(200,(20 + 70 * (types / 2) + 1)));
 		towersView.setLayout(null);
 		
-		
+		//put in how many tower types are in
 		JPanel towerTypes[] = new JPanel[types];
 		
+		//information for tower types
 		String towerImage[] = {"tower0.png", "tower1.png", "tower2.png", "tower0r.png", "tower1r.png", "tower2r.png"};
 		int towerCost[] = {25, 50, 75, 25, 50, 75};
 		
+		//loads each tower type
+		//load left tower types
 		for(int v = 0; v < towerTypes.length / 2; v++) {
 			
+			//jpanel to hold tower button and cost
 			towerTypes[v] = new JPanel();
 			towerTypes[v].setBounds(20, (20 + 70 * v), 50, 50);
 			towersView.add(towerTypes[v]);
 			towerTypes[v].setLayout(null);
 			
+			//image for button
 			ImageIcon image = new ImageIcon(towerImage[v]);
 			Image image2 = image.getImage();
 			Image newImage = image2.getScaledInstance(30, 30,  java.awt.Image.SCALE_SMOOTH);
 			image = new ImageIcon(newImage);
 			
+			//tower creation button with image of it
 			JButton tower = new JButton(image);
 			tower.setText(v + "");
 			tower.setFont(new Font("Tahoma", Font.PLAIN, 0));
@@ -82,39 +90,42 @@ public class Game extends JPanel{
 			towerTypes[v].add(tower);
 			tower.setLayout(null);
 			
+			//cost below tower creation button
 			JLabel cost = new JLabel();
 			cost.setBounds(0, 30, 50, 20);
 			cost.setText("$" + towerCost[v]);
 			cost.setHorizontalAlignment(SwingConstants.CENTER);
 			towerTypes[v].add(cost);
 			
+			//what happens when tower is clicked
 			tower.addMouseListener(new MouseAdapter() {
 				public void mouseClicked(MouseEvent event) {
-					//work or fail statement
-					map.createTower(xClick, yClick, (tower.getText()), towerImage, towerCost);
-					
-					//update
-					update();
+					createTower(xClick, yClick, tower.getText(), towerImage, towerCost);
 				}
 			});
 			
 			
 		}
 		
+		//load right tower types
 		for(int v = 0; v < towerTypes.length / 2; v++) {
 			
+			//increase to different v so correct position on array
 			int tempv = v + (towerTypes.length / 2);
 			
+			//jpanel to hold tower button and cost
 			towerTypes[tempv] = new JPanel();
 			towerTypes[tempv].setBounds(90, (20 + 70 * v), 50, 50);
 			towersView.add(towerTypes[tempv]);
 			towerTypes[tempv].setLayout(null);
 			
+			//image for button
 			ImageIcon image = new ImageIcon(towerImage[tempv]);
 			Image image2 = image.getImage();
 			Image newImage = image2.getScaledInstance(30, 30,  java.awt.Image.SCALE_SMOOTH);
 			image = new ImageIcon(newImage);
 			
+			//tower creation button with image of it
 			JButton tower = new JButton(image);
 			tower.setText(tempv + "");
 			tower.setFont(new Font("Tahoma", Font.PLAIN, 0));
@@ -125,51 +136,37 @@ public class Game extends JPanel{
 			towerTypes[tempv].add(tower);
 			tower.setLayout(null);
 			
+			//cost below tower creation button
 			JLabel cost = new JLabel();
 			cost.setBounds(0, 30, 50, 20);
 			cost.setText("$" + towerCost[tempv]);
 			cost.setHorizontalAlignment(SwingConstants.CENTER);
 			towerTypes[tempv].add(cost);
 			
+			//what happens when tower is clicked
 			tower.addMouseListener(new MouseAdapter() {
 				public void mouseClicked(MouseEvent event) {
-					map.createTower(xClick, yClick, (tower.getText()), towerImage, towerCost);
-					
-					//update
-					update();
+					createTower(xClick, yClick, tower.getText(), towerImage, towerCost);
 				}
 			});
 			
 			
 		}
 		
+		//create towerMenu with towersView for a scroll pane
 		JScrollPane towersMenu = new JScrollPane(towersView);
 		towersMenu.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 		towersMenu.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 		towersMenu.setBounds(10, 60, 180, 240);
 		controls.add(towersMenu);
 		
+		//button for start/pause/unpause/end
 		JButton start = new JButton("Start");
 		start.setFont(new Font("Tahoma", Font.PLAIN, 24));
 		start.setBounds(10, 310, 180, 40);
 		controls.add(start);
 		
-		/*game over screen
-		JLabel overT = new JLabel("Game Over");
-		overT.setHorizontalAlignment(SwingConstants.CENTER);
-		overT.setBounds(400, 220, 200, 20);
-		add(overT);
-		
-		JLabel overT2 = new JLabel("Click to go to main screen");
-		overT2.setHorizontalAlignment(SwingConstants.CENTER);
-		overT2.setBounds(400, 240, 200, 20);
-		add(overT2);
-		
-		JButton over = new JButton("End Game");
-		over.setFont(new Font("Tahoma", Font.PLAIN, 24));
-		over.setBounds(400, 260, 200, 40);
-		add(over);*/
-		
+		//upgrade window
 		upgrades = new UpgradesGen();
 		upgrades.setBounds(10, 410, 180, 180);
 		upgrades.setBorder(new LineBorder(Color.DARK_GRAY));
@@ -182,6 +179,7 @@ public class Game extends JPanel{
 		upgrades.getPath1().setEnabled(false);
 		upgrades.getPath2().setEnabled(false);
 		
+		//create map for enemies and towers
 		map = new MapLoad(mode, file);
 		map.setBounds(200, 0, 600, 600);
 		add(map);
@@ -331,6 +329,20 @@ public class Game extends JPanel{
 		moneyL.setText("Money: " + map.getMoney());
 		liveL.setText("Live: " + map.getLive());
 		roundL.setText("Round: " + map.getRound());
+	}
+	
+	public void createTower(int xClick, int yClick, String value, String[] towerImage, int[] towerCost) {
+		//check if on path if not place
+		if(map.getTpPath(xClick, yClick)) {
+			//create tower function is MapLoad
+			map.createTower(xClick, yClick, value, towerImage, towerCost);
+		}
+		//can place on path
+		else {
+			System.out.println("Can't place on Path");
+		}
+		//update
+		update();
 	}
 	
 	public void path1Click(MouseEvent event) {

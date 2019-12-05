@@ -96,19 +96,26 @@ public class MapLoad extends JPanel{
 					//bullets and enemy collision
 					int tempe = enemies.size();
 					for(int e = 0; e < enemies.size(); e++) {
-						//
+						//check each tower
 						for(int t = 0; t < towers.size(); t++) {
-							//
+							//check each bullet
 							for(int b = 0; b < towers.get(t).getBullets().size(); b++) {
 								//check each x and y in bullet size
 								for(int x = 0; x < towers.get(t).getBullets().get(b).getImageW(); x++) {
 									for(int y = 0; y < towers.get(t).getBullets().get(b).getImageH(); y++) {
 										//increase from bullets current x and y
-										int tempx = x + towers.get(t).getBullets().get(b).getX();
-										int tempy = y + towers.get(t).getBullets().get(b).getY();
+										int tempx = x + towers.get(t).getBulletX(b);
+										int tempy = y + towers.get(t).getBulletY(b);
 										if(enemies.size() == tempe && enemies.size() != 0 && enemies.get(e).inBound(tempx, tempy)) {
-											//bye enemy
-											deleteEnemy(e);
+											//check that tower has strength
+											if(enemies.get(e).getStrength() <= towers.get(t).getStrength()) {
+												//bye enemy
+												deleteEnemy(e);
+											}
+											else {
+												System.out.println("Not enough strength");
+											}
+											
 										}
 									}	
 								}
@@ -149,6 +156,7 @@ public class MapLoad extends JPanel{
 			this.setVisible(false);
 		}
 		
+		//sleep to reduce lag and make frame rate
 		try {
 			Thread.sleep(35);
 		}catch(Exception e) {
@@ -198,10 +206,12 @@ public class MapLoad extends JPanel{
 	
 	public void createTower(int posx, int posy, String value, String towerImage[], int towerCost[]) {
 		
+		//turn string value from button text to normal int value
 		int valueI = Integer.parseInt(value);
 		
 		//var to create the tower types
 		String bulletImage[] = {"bullet0.png", "bullet1.png", "bullet2.png", "bullet0.png", "bullet1.png", "bullet2r.png"};
+		int towerStrength[] = {1, 2, 1, 1, 2, 1};
 		
 		//vars for bullets
 		int bulletWH[][] = {{25, 25}, {25, 25}, {50, 50}, {25, 25}, {25, 25}, {50, 50}};
@@ -210,11 +220,10 @@ public class MapLoad extends JPanel{
 		int spaceBetween[] = {50, 100, 80, 50, 100, 80};
 		
 		//var for upgrade
-		Upgrade towerUpgrades[] = new Upgrade[4];
-		towerUpgrades[0] = new Distance("hi", "increase distance", 20, 10);
-		towerUpgrades[1] = new Distance("hi2", "decrease distance", 20, -10);
-		towerUpgrades[2] = new Velocity("hi3", "increase v", 20, 1, 0);
-		towerUpgrades[3] = new Velocity("hi4", "decrease v", 20, -1, 0);
+		Upgrade towerUpgrades[][] = new Upgrade[6][4];
+		
+		//load upgrade
+		loadUpgrade(towerUpgrades);
 		
 		
 		//move to x and y to the tile it is in
@@ -233,7 +242,7 @@ public class MapLoad extends JPanel{
 				//check cost
 				if(money >= towerCost[valueI]) {
 					//create tower
-					towers.add(new Tower(posx, posy, ti, (posx + bulletXY[valueI][0]), posy + (bulletXY[valueI][1]), bi, bulletWH[valueI][0], bulletWH[valueI][1], moveDir[valueI][0], moveDir[valueI][1], spaceBetween[valueI], towerUpgrades));
+					towers.add(new Tower(posx, posy, ti, (posx + bulletXY[valueI][0]), posy + (bulletXY[valueI][1]), bi, bulletWH[valueI][0], bulletWH[valueI][1], moveDir[valueI][0], moveDir[valueI][1], spaceBetween[valueI], towerStrength[valueI], towerUpgrades[valueI]));
 					
 					//upgrades for tower
 					
@@ -252,6 +261,45 @@ public class MapLoad extends JPanel{
 		}else {
 			System.out.println("Already a tower there");
 		}
+		
+	}
+	
+	public void loadUpgrade(Upgrade[][] towerUpgrades) {
+		//tower0 load
+		towerUpgrades[0][0] = new Distance("Bigger cannon balls", "Lower rate of fire", 40, 150);
+		towerUpgrades[0][1] = new Velocity("Faster cannon balls", "Move faster", 20, 2, 0);
+		towerUpgrades[0][2] = new Strength("Increase Strength", "Can kill bigger enemies", 120, 2);
+		towerUpgrades[0][3] = new Distance("Smaller cannon balls", "Faster rate of fire", 80, -30);
+		
+		//tower1 load
+		towerUpgrades[1][0] = new Distance("Less rocks", "Slower rate of fire", 80, 450);
+		towerUpgrades[1][1] = new Velocity("Faster hydraulics", "Faster moving rocks", 20, 0, -1);
+		towerUpgrades[1][2] = new Strength("Sharper rocks", "Increase strength", 120, 3);
+		towerUpgrades[1][3] = new Distance("Rock shaping", "Faster rate of fire", 20, -200);
+		
+		//tower2 load
+		towerUpgrades[2][0] = new Distance("Bigger rockets", "Slower rate of fire", 80, 40);
+		towerUpgrades[2][1] = new Velocity("Better fuel", "Increased velocity", 40, -2, -2);
+		towerUpgrades[2][2] = new Velocity("Better rocket engine", "Increase velocity", 80, -4, -4);
+		towerUpgrades[2][3] = new Strength("Better explosive", "Increased strength", 160, 1);
+		
+		//tower3 load
+		towerUpgrades[3][0] = new Distance("Bigger cannon balls", "Lower rate of fire", 40, 150);
+		towerUpgrades[3][1] = new Velocity("Faster cannon balls", "Move faster", 20, -2, 0);
+		towerUpgrades[3][2] = new Strength("Increase Strength", "Can kill bigger enemies", 120, 2);
+		towerUpgrades[3][3] = new Distance("Smaller cannon balls", "Faster rate of fire", 80, -30);
+		
+		//tower4 load
+		towerUpgrades[4][0] = new Distance("Less rocks", "Slower rate of fire", 80, 450);
+		towerUpgrades[4][1] = new Velocity("Faster hydraulics", "Faster moving rocks", 20, 0, 1);
+		towerUpgrades[4][2] = new Strength("Sharper rocks", "Increase strength", 120, 3);
+		towerUpgrades[4][3] = new Distance("Rock shaping", "Faster rate of fire", 120, -200);
+		
+		//tower5 load
+		towerUpgrades[5][0] = new Distance("Bigger rockets", "Slower rate of fire", 80, 40);
+		towerUpgrades[5][1] = new Velocity("Better fuel", "Increased velocity", 40, -2, 2);
+		towerUpgrades[5][2] = new Velocity("Better rocket engine", "Increase velocity", 80, -4, 4);
+		towerUpgrades[5][3] = new Strength("Better explosive", "Increased strength", 160, 1);
 		
 	}
 	
@@ -333,14 +381,13 @@ public class MapLoad extends JPanel{
 		//add enemies to array list depending on round
 		try {
 			//enemy stats
-			int enemyHealths[] = {1, 2, 3, 4, 5, 6, 7, 10, 12, 16};
 			int enemyStrength[] = {1, 1, 1, 1, 1, 1, 1, 2, 2, 4};
 			
 			//round start creating
 			int roundStart[] = {0, 2, 4, 6, 7, 8, 9, 10, 11, 12};
 			
 			//round number created
-			int roundNum[] = { 20, 10, 5, 4, 4, 4, 3, 2, 2, 1};
+			int roundNum[] = { 8, 5, 5, 4, 4, 4, 3, 2, 2, 1};
 			
 			//the ten types
 			for(int i = 0; i < 10; i++) {
@@ -350,7 +397,7 @@ public class MapLoad extends JPanel{
 					BufferedImage image = ImageIO.read(new File("enemy" + (i + 1) + ".png"));
 					
 					//add enemy
-					enemies.add(new Enemy(startPos[0],startPos[1], image, enemyHealths[i], enemyStrength[i], path));
+					enemies.add(new Enemy(startPos[0],startPos[1], image, enemyStrength[i], path));
 				}
 			}
 			
@@ -384,12 +431,34 @@ public class MapLoad extends JPanel{
 	public String getTp(int xIn, int yIn) {
 		String answer = "";
 		
+		//check each path
 		for(int v = 0; v < path.length; v++) {
+			//see if x and y on path
 			if(path[v].inBounds(xIn, yIn)) {
+				//don't place
 				answer = "On Path";
 				break;
 			}else {
 				answer = "x: " + (xIn - (xIn % 50)) + " y: " + (yIn - (yIn % 50));
+			}
+		}
+		
+		return answer;
+	}
+	
+	//see if ok to place or not
+	public boolean getTpPath(int xIn, int yIn) {
+		boolean answer = true;
+		
+		//check each path
+		for(int v = 0; v < path.length; v++) {
+			//see if x and y on path
+			if(path[v].inBounds(xIn, yIn)) {
+				//don't place
+				answer = false;
+				break;
+			}else {
+				answer = true;
 			}
 		}
 		

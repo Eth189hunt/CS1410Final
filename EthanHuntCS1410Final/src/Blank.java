@@ -12,7 +12,7 @@ public class Blank extends Upgrade {
 	}
 
 	public void change(Tower t) {
-		
+		//no change can happen
 	}
 
 }
