@@ -48,10 +48,10 @@ public class Enemy extends MovingObject{
 		boolean answer = false;
 		
 		//set vars for min/max on x and y
-		int nx = posx;
-		int mx = posx + 38;
-		int ny = posy;
-		int my = posy + 38;
+		int nx = posx - 38;
+		int mx = posx;
+		int ny = posy - 38;
+		int my = posy;
 		
 		//true if there is a collision
 		if((nx <= xIn && xIn <= mx)) {
